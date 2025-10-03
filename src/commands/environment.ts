@@ -25,42 +25,39 @@ function pull(program: Command) {
 			initOpenAPIConfig();
 
 			const projects: Project[] = await ProjectService.projectAll();
+			projects.sort((a, b) => a.name.localeCompare(b.name));
+
 			const selectedProject = await select({
 				message: pc.blue("Select Project"),
-				choices: projects
-					.toSorted((a, b) => a.name.localeCompare(b.name))
-					.map((project) => ({
-						name: project.name,
-						value: project,
-					})),
+				choices: projects.map((project) => ({
+					name: project.name,
+					value: project,
+				})),
 			});
+			selectedProject.environments.sort((a, b) => a.name.localeCompare(b.name));
 
 			const selectedEnvironment = await select({
 				message: pc.blue("Select Environment"),
-				choices: selectedProject.environments
-					.toSorted((a, b) => a.name.localeCompare(b.name))
-					.map((environment) => ({
-						name: environment.name,
-						value: environment,
-					})),
+				choices: selectedProject.environments.map((environment) => ({
+					name: environment.name,
+					value: environment,
+				})),
 			});
+			selectedEnvironment.applications.sort((a, b) => a.name.localeCompare(b.name));
+			selectedEnvironment.compose.sort((a, b) => a.name.localeCompare(b.name));
 
 			const pulledEnv = await select({
 				message: pc.blue("Select service to pull environment variables from"),
 				choices: [
-					...selectedEnvironment.applications
-						.toSorted((a, b) => a.name.localeCompare(b.name))
-						.map((application) => ({
-							name: `${application.name} (Application)`,
-							value: application.env,
-						})),
-					...selectedEnvironment.compose
-						.toSorted((a, b) => a.name.localeCompare(b.name))
-						.map((compose) => ({
-							name: `${compose.name} (Compose)`,
-							value: compose.env,
-							description: compose.description,
-						})),
+					...selectedEnvironment.applications.map((application) => ({
+						name: `${application.name} (Application)`,
+						value: application.env,
+					})),
+					...selectedEnvironment.compose.map((compose) => ({
+						name: `${compose.name} (Compose)`,
+						value: compose.env,
+						description: compose.description,
+					})),
 				],
 			});
 
@@ -121,42 +118,39 @@ function push(program: Command) {
 			}
 
 			const projects: Project[] = await ProjectService.projectAll();
+			projects.sort((a, b) => a.name.localeCompare(b.name));
+
 			const selectedProject = await select({
 				message: pc.blue("Select Project"),
-				choices: projects
-					.toSorted((a, b) => a.name.localeCompare(b.name))
-					.map((project) => ({
-						name: project.name,
-						value: project,
-					})),
+				choices: projects.map((project) => ({
+					name: project.name,
+					value: project,
+				})),
 			});
+			selectedProject.environments.sort((a, b) => a.name.localeCompare(b.name));
 
 			const selectedEnvironment = await select({
 				message: pc.blue("Select Environment"),
-				choices: selectedProject.environments
-					.toSorted((a, b) => a.name.localeCompare(b.name))
-					.map((environment) => ({
-						name: environment.name,
-						value: environment,
-					})),
+				choices: selectedProject.environments.map((environment) => ({
+					name: environment.name,
+					value: environment,
+				})),
 			});
+			selectedEnvironment.applications.sort((a, b) => a.name.localeCompare(b.name));
+			selectedEnvironment.compose.sort((a, b) => a.name.localeCompare(b.name));
 
 			const selectedService = await select<Application | Compose>({
 				message: pc.blue("Select service to pus environment variables to"),
 				choices: [
-					...selectedEnvironment.applications
-						.toSorted((a, b) => a.name.localeCompare(b.name))
-						.map((application) => ({
-							name: `${application.name} (Application)`,
-							value: application,
-						})),
-					...selectedEnvironment.compose
-						.toSorted((a, b) => a.name.localeCompare(b.name))
-						.map((compose) => ({
-							name: `${compose.name} (Compose)`,
-							value: compose,
-							description: compose.description,
-						})),
+					...selectedEnvironment.applications.map((application) => ({
+						name: `${application.name} (Application)`,
+						value: application,
+					})),
+					...selectedEnvironment.compose.map((compose) => ({
+						name: `${compose.name} (Compose)`,
+						value: compose,
+						description: compose.description,
+					})),
 				],
 			});
 
