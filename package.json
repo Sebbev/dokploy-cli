@@ -1,0 +1,35 @@
+{
+  "name": "dokploy-cli",
+  "description": "A CLI tool for managing your Dokploy instance",
+  "author": "Sebastian Vallin",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "src/main.ts",
+  "module": "src/main.ts",
+  "type": "module",
+  "bin": {
+    "dokploy": "./bin/main.js"
+  },
+  "scripts": {
+    "start": "bun --env-file=.env run src/main.ts",
+    "build": "./scripts/build.ts",
+    "dev": "./scripts/dev.ts",
+    "dokploy:generate": "openapi -i dokploy-openapi.json -o ./src/generated/dokploy"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "openapi-typescript-codegen": "^0.29.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^7.8.6",
+    "commander": "^14.0.1",
+    "picocolors": "^1.1.1",
+    "valibot": "^1.1.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
