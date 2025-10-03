@@ -5028,12 +5028,15 @@ function safeParse(schema, input, config2) {
 import fs from "node:fs";
 import path from "node:path";
 var import_picocolors = __toESM(require_picocolors(), 1);
+import { fileURLToPath } from "node:url";
+var __filename2 = fileURLToPath(import.meta.url);
+var __dirname2 = path.dirname(__filename2);
+var configPath = path.resolve(__dirname2, "..", "./config.json");
 var ConfigSchema = partial(object({
   url: string(),
   token: string()
 }));
 var configCache = null;
-var configPath = path.resolve(import.meta.dir, "..", "./config.json");
 function getConfig() {
   if (configCache)
     return configCache;

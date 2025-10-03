@@ -3,6 +3,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { OpenAPI } from "./generated/dokploy";
 import pc from "picocolors";
+import { fileURLToPath } from "node:url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const configPath = path.resolve(__dirname, "..", "./config.json");
 
 const ConfigSchema = v.partial(
   v.object({
@@ -14,8 +19,6 @@ const ConfigSchema = v.partial(
 export type Config = v.InferOutput<typeof ConfigSchema>;
 
 let configCache: Config | null = null;
-
-const configPath = path.resolve(import.meta.dir, "..", "./config.json");
 
 function getConfig() {
   if (configCache) return configCache;
