@@ -4,53 +4,78 @@ A CLI for managing your Dokploy instance from the terminal.
 
 > Note: This is a community-made, unofficial Dokploy CLI. It is not affiliated with or endorsed by the Dokploy team.
 
+## Table of contents
+
+- [Requirements](#requirements)
+- [Installation](#installation)
+  - [Global install](#global-install)
+  - [Use with npx](#use-with-npx)
+  - [Add to a project](#add-to-a-project)
+- [Usage](#usage)
+  - [Show help and version](#show-help-and-version)
+  - [Authentication](#authentication)
+  - [Environment variables](#environment-variables)
+- [Development (from source)](#development-from-source)
+  - [Regenerate API client](#regenerate-api-client)
+- [Troubleshooting](#troubleshooting)
+- [License](#license)
+
 ## Requirements
 
 - Bun 1.0+ (for building and local development)
 - Node.js 18+ (to run the built binary; enforced via `engines`)
 
-## Install & build
+## Installation
 
-1. Install dependencies
-
-```bash
-bun install
-```
-
-1. Build the CLI (outputs to `bin/main.js`)
+### Global install
 
 ```bash
-bun run build
+npm i -g dokploy-cli
+# or
+pnpm add -g dokploy-cli
+# or
+yarn global add dokploy-cli
+# or
+bun add -g dokploy-cli
 ```
 
-1. Run it
-
-- From source (no build):
+After a global install, run the CLI with:
 
 ```bash
-# Run directly with Bun
-bun run src/main.ts --help
+dokploy --help
 ```
 
-- Using the built binary:
+### Use with npx
 
 ```bash
-# With Node
-node ./bin/main.js --help
-
-# Or with Bun
-bun ./bin/main.js --help
+npx dokploy-cli --help
 ```
 
-Note: When installed as a package, the binary name is `dokploy` (see `bin` in `package.json`). From this repo locally, prefer the built binary as shown above.
+### Add to a project
+
+```bash
+npm i -D dokploy-cli
+# or
+pnpm add -D dokploy-cli
+# or
+yarn add -D dokploy-cli
+# or
+bun add -d dokploy-cli
+```
+
+Then invoke with npx or a package.json script:
+
+```bash
+npx dokploy-cli --version
+```
 
 ## Usage
 
-Show help and version:
+### Show help and version
 
 ```bash
-node ./bin/main.js --help
-node ./bin/main.js --version
+dokploy --help
+dokploy --version
 ```
 
 Current top-level commands:
@@ -62,47 +87,26 @@ Current top-level commands:
 
 ## Authentication
 
-The CLI stores auth settings in `config.json` (created alongside the binary/repo root). You can provide flags or use interactive prompts.
+The CLI stores auth settings in a local configuration file. You can provide flags or use interactive prompts.
 
 ### Login
 
 ```bash
-node ./bin/main.js auth login [--url <URL>] [--token <TOKEN>]
+dokploy auth login [--url <URL>] [--token <TOKEN>]
 ```
 
-- `--url` The Dokploy server URL, e.g. `https://panel.dokploy.com`
-- `--token` Your API token
-
-If flags are omitted, you’ll be prompted:
-
-```text
-Enter your Dokploy server URL (e.g. https://panel.dokploy.com):
-Enter your authentication token:
-```
-
-On success you’ll see:
-
-```text
-Validating server...
-Successfully authenticated with Dokploy!
-```
-
-Common validation messages:
-
-- Invalid URL format -> a clear validation error is shown
-- Empty token -> a clear validation error is shown
+- Flags:
+  - `--url` Dokploy server URL (e.g. `https://panel.dokploy.com`)
+  - `--token` API token
+  - If omitted, you’ll be prompted interactively.
 
 ### Verify
 
 ```bash
-node ./bin/main.js auth verify
+dokploy auth verify
 ```
 
-Checks the saved `config.json` by making a request to the server. Typical outputs:
-
-- Success: `Successfully authenticated with Dokploy!`
-- Failure: `Failed to authenticate with Dokploy: <reason>`
-- If config is missing/invalid: `Invalid configuration file. Please authenticate again using the 'login' command.`
+Validates saved credentials by calling the server.
 
 ---
 
@@ -113,57 +117,38 @@ Interactively pull and push environment variables for a specific Project → Env
 ### Pull
 
 ```bash
-node ./bin/main.js env pull <file>
+dokploy env pull <file>
 ```
 
-What happens:
+Description: interactively select Project → Environment → Service and write the service’s env to `<file>`.
 
-1. You’ll be prompted to select the Project
-2. Then the Environment
-3. Then the Service (shows Applications and Compose services)
-4. The service’s env is written to `<file>`
+Args:
 
-Typical prompts/messages:
-
-- If `<file>` exists, you’ll be asked: `File already exists. Overwrite?` (default: No)
-- Success: `Environment variables pulled successfully`
-
-Example:
-
-```bash
-node ./bin/main.js env pull .env
-```
+- `<file>` Output path for the env contents (e.g. `.env`).
 
 ### Push
 
 ```bash
-node ./bin/main.js env push <file>
+dokploy env push <file>
 ```
 
-What happens:
+Description: read env from `<file>`, choose Project → Environment → Service, and update the selected service’s env.
 
-1. You’re asked to confirm pushing because it overwrites variables: `Are you sure you want to push environment variables? This will overwrite any existing variables.`
-2. The CLI reads `<file>`
-3. You select Project → Environment → Service
-4. The env is pushed to the selected service
+Args:
 
-Typical prompts/errors:
-
-- If `<file>` is missing: `File does not exist, please provide a valid file path.`
-- API errors show details like: `Failed to push environment variables: <message> (<status>)`
-- Success: `Environment variables pushed successfully`
-
-Examples:
-
-```bash
-node ./bin/main.js env push .env
-```
+- `<file>` Input path of the env file to push (e.g. `.env`).
 
 ---
 
-## Development
+## Development (from source)
 
-- One-off build:
+- Install deps:
+
+```bash
+bun install
+```
+
+- One-off build (outputs to `bin/main.js`):
 
 ```bash
 bun run build
@@ -173,12 +158,6 @@ bun run build
 
 ```bash
 bun run dev
-```
-
-- Run from source (no build):
-
-```bash
-bun run src/main.ts --help
 ```
 
 ### Regenerate API client
