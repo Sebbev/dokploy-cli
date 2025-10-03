@@ -28,6 +28,7 @@ await Bun.build({
   outdir: outDir,
   target: "node",
   tsconfig: tsconfigPath,
+  banner: "#!/usr/bin/env node",
 });
 
 console.log("Build completed!");
