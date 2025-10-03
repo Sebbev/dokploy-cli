@@ -1,24 +1,29 @@
 # Dokploy CLI
 
-A CLI for managing your Dokploy instance from the terminal.
+A CLI for managing your Dokploy server from the terminal.
 
 > Note: This is a community-made, unofficial Dokploy CLI. It is not affiliated with or endorsed by the Dokploy team.
 
 ## Table of contents
 
-- [Requirements](#requirements)
-- [Installation](#installation)
-  - [Global install](#global-install)
-  - [Use with npx](#use-with-npx)
-  - [Add to a project](#add-to-a-project)
-- [Usage](#usage)
-  - [Show help and version](#show-help-and-version)
+- [Dokploy CLI](#dokploy-cli)
+  - [Table of contents](#table-of-contents)
+  - [Requirements](#requirements)
+  - [Installation](#installation)
+    - [Global install](#global-install)
+    - [Use with npx](#use-with-npx)
+    - [Add to a project](#add-to-a-project)
+  - [Usage](#usage)
+    - [Show help and version](#show-help-and-version)
   - [Authentication](#authentication)
+    - [Login](#login)
+    - [Verify](#verify)
   - [Environment variables](#environment-variables)
-- [Development (from source)](#development-from-source)
-  - [Regenerate API client](#regenerate-api-client)
-- [Troubleshooting](#troubleshooting)
-- [License](#license)
+    - [Pull](#pull)
+    - [Push](#push)
+  - [Development (from source)](#development-from-source)
+    - [Regenerate API client](#regenerate-api-client)
+  - [License](#license)
 
 ## Requirements
 
@@ -30,37 +35,37 @@ A CLI for managing your Dokploy instance from the terminal.
 ### Global install
 
 ```bash
-npm i -g dokploy-cli
+npm i -g @sebbev/dokploy-cli
 # or
-pnpm add -g dokploy-cli
+pnpm add -g @sebbev/dokploy-cli
 # or
-yarn global add dokploy-cli
+yarn global add @sebbev/dokploy-cli
 # or
-bun add -g dokploy-cli
+bun add -g @sebbev/dokploy-cli
 ```
 
 After a global install, run the CLI with:
 
 ```bash
-dokploy --help
+dokploy-cli --help
 ```
 
 ### Use with npx
 
 ```bash
-npx dokploy-cli --help
+npx @sebbev/dokploy-cli --help
 ```
 
 ### Add to a project
 
 ```bash
-npm i -D dokploy-cli
+npm i -D @sebbev/dokploy-cli
 # or
-pnpm add -D dokploy-cli
+pnpm add -D @sebbev/dokploy-cli
 # or
-yarn add -D dokploy-cli
+yarn add -D @sebbev/dokploy-cli
 # or
-bun add -d dokploy-cli
+bun add -d @sebbev/dokploy-cli
 ```
 
 Then invoke with npx or a package.json script:
@@ -74,8 +79,8 @@ npx dokploy-cli --version
 ### Show help and version
 
 ```bash
-dokploy --help
-dokploy --version
+dokploy-cli --help
+dokploy-cli --version
 ```
 
 Current top-level commands:
@@ -92,7 +97,7 @@ The CLI stores auth settings in a local configuration file. You can provide flag
 ### Login
 
 ```bash
-dokploy auth login [--url <URL>] [--token <TOKEN>]
+dokploy-cli auth login [--url <URL>] [--token <TOKEN>]
 ```
 
 - Flags:
@@ -103,7 +108,7 @@ dokploy auth login [--url <URL>] [--token <TOKEN>]
 ### Verify
 
 ```bash
-dokploy auth verify
+dokploy-cli auth verify
 ```
 
 Validates saved credentials by calling the server.
@@ -117,7 +122,7 @@ Interactively pull and push environment variables for a specific Project → Env
 ### Pull
 
 ```bash
-dokploy env pull <file>
+dokploy-cli env pull <file>
 ```
 
 Description: interactively select Project → Environment → Service and write the service’s env to `<file>`.
@@ -129,7 +134,7 @@ Args:
 ### Push
 
 ```bash
-dokploy env push <file>
+dokploy-cli env push <file>
 ```
 
 Description: read env from `<file>`, choose Project → Environment → Service, and update the selected service’s env.
@@ -167,26 +172,6 @@ The SDK in `src/generated/dokploy` is generated from the local `dokploy-openapi.
 ```bash
 bun run dokploy:generate
 ```
-
----
-
-## Troubleshooting
-
-- Invalid configuration
-
-  - Message: `Invalid configuration file. Please authenticate again using the 'login' command.`
-  - Fix: run `auth login` again
-
-- Auth failures when verifying or pushing/pulling
-
-  - Ensure the URL and token are correct with `auth verify`
-
-- File already exists on pull
-
-  - You’ll be prompted to confirm overwrite; choose No to abort safely
-
-- Missing `.env` (or custom file) on push
-  - Create the file first, e.g. `.env`, then rerun the push command
 
 ---
 
