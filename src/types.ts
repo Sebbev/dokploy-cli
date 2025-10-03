@@ -41,3 +41,13 @@ export interface Compose {
 	env: string;
 	// more fields...
 }
+
+export interface Project {
+	projectId: string;
+	name: string;
+	description: string;
+	createdAt: string;
+	organizationId: string;
+	env: string;
+	environments: Environment[];
+}
