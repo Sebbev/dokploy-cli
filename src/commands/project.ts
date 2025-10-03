@@ -16,7 +16,26 @@ export function registerProjectCommands(program: Command) {
 
 function create(program: Command) {}
 
-function info(program: Command) {}
+function info(program: Command) {
+	program
+		.command("info")
+		.description("Get information about a project")
+		.option("-p, --project [project]", "Project ID")
+		.action(async () => {
+			type Options = {
+				project?: string;
+			};
+
+			initOpenAPIConfig();
+
+			const options = program.opts<Options>();
+
+			let project: Project;
+			if (options.project) {
+			} else {
+			}
+		});
+}
 
 function list(program: Command) {
 	program
