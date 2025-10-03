@@ -1,44 +1,47 @@
 {
-  "name": "@sebbev/dokploy-cli",
-  "description": "A CLI tool for managing your Dokploy server",
-  "author": "Sebastian Vallin",
-  "version": "0.1.0",
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/Sebbev/dokploy-cli/blob/main/LICENSE"
-    }
-  ],
-  "homepage": "https://github.com/Sebbev/dokploy-cli#readme",
-  "bugs": "https://github.com/Sebbev/dokploy-cli/issues",
-  "main": "bin/main.js",
-  "type": "module",
-  "bin": {
-    "dokploy-cli": "bin/main.js"
-  },
-  "files": [
-    "bin"
-  ],
-  "scripts": {
-    "start": "bun --env-file=.env run src/main.ts",
-    "build": "bun run ./scripts/build.ts",
-    "dev": "bun run ./scripts/dev.ts",
-    "dokploy:generate": "openapi -i dokploy-openapi.json -o ./src/generated/dokploy"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "openapi-typescript-codegen": "^0.29.0"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
-  },
-  "dependencies": {
-    "@inquirer/prompts": "^7.8.6",
-    "commander": "^14.0.1",
-    "picocolors": "^1.1.1",
-    "valibot": "^1.1.0"
-  },
-  "engines": {
-    "node": ">=18"
-  }
+	"name": "@sebbev/dokploy-cli",
+	"description": "A CLI tool for managing your Dokploy server",
+	"author": "Sebastian Vallin",
+	"version": "0.1.0",
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "https://github.com/Sebbev/dokploy-cli/blob/main/LICENSE"
+		}
+	],
+	"homepage": "https://github.com/Sebbev/dokploy-cli#readme",
+	"bugs": "https://github.com/Sebbev/dokploy-cli/issues",
+	"main": "bin/main.js",
+	"type": "module",
+	"bin": {
+		"dokploy-cli": "bin/main.js"
+	},
+	"files": [
+		"bin"
+	],
+	"scripts": {
+		"start": "bun --env-file=.env run src/main.ts",
+		"build": "bun run ./scripts/build.ts",
+		"dev": "bun run ./scripts/dev.ts",
+		"dokploy:generate": "openapi -i dokploy-openapi.json -o ./src/generated/dokploy",
+		"format": "biome check --write",
+		"lint": "biome lint"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "2.2.5",
+		"@types/bun": "latest",
+		"openapi-typescript-codegen": "^0.29.0"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"dependencies": {
+		"@inquirer/prompts": "^7.8.6",
+		"commander": "^14.0.1",
+		"picocolors": "^1.1.1",
+		"valibot": "^1.1.0"
+	},
+	"engines": {
+		"node": ">=18"
+	}
 }

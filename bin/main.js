@@ -2112,76 +2112,6 @@ var require_commander = __commonJS((exports) => {
   exports.InvalidOptionArgumentError = InvalidArgumentError;
 });
 
-// node_modules/picocolors/picocolors.js
-var require_picocolors = __commonJS((exports, module) => {
-  var p = process || {};
-  var argv = p.argv || [];
-  var env = p.env || {};
-  var isColorSupported = !(!!env.NO_COLOR || argv.includes("--no-color")) && (!!env.FORCE_COLOR || argv.includes("--color") || p.platform === "win32" || (p.stdout || {}).isTTY && env.TERM !== "dumb" || !!env.CI);
-  var formatter = (open, close, replace = open) => (input) => {
-    let string2 = "" + input, index = string2.indexOf(close, open.length);
-    return ~index ? open + replaceClose(string2, close, replace, index) + close : open + string2 + close;
-  };
-  var replaceClose = (string2, close, replace, index) => {
-    let result = "", cursor = 0;
-    do {
-      result += string2.substring(cursor, index) + replace;
-      cursor = index + close.length;
-      index = string2.indexOf(close, cursor);
-    } while (~index);
-    return result + string2.substring(cursor);
-  };
-  var createColors = (enabled = isColorSupported) => {
-    let f = enabled ? formatter : () => String;
-    return {
-      isColorSupported: enabled,
-      reset: f("\x1B[0m", "\x1B[0m"),
-      bold: f("\x1B[1m", "\x1B[22m", "\x1B[22m\x1B[1m"),
-      dim: f("\x1B[2m", "\x1B[22m", "\x1B[22m\x1B[2m"),
-      italic: f("\x1B[3m", "\x1B[23m"),
-      underline: f("\x1B[4m", "\x1B[24m"),
-      inverse: f("\x1B[7m", "\x1B[27m"),
-      hidden: f("\x1B[8m", "\x1B[28m"),
-      strikethrough: f("\x1B[9m", "\x1B[29m"),
-      black: f("\x1B[30m", "\x1B[39m"),
-      red: f("\x1B[31m", "\x1B[39m"),
-      green: f("\x1B[32m", "\x1B[39m"),
-      yellow: f("\x1B[33m", "\x1B[39m"),
-      blue: f("\x1B[34m", "\x1B[39m"),
-      magenta: f("\x1B[35m", "\x1B[39m"),
-      cyan: f("\x1B[36m", "\x1B[39m"),
-      white: f("\x1B[37m", "\x1B[39m"),
-      gray: f("\x1B[90m", "\x1B[39m"),
-      bgBlack: f("\x1B[40m", "\x1B[49m"),
-      bgRed: f("\x1B[41m", "\x1B[49m"),
-      bgGreen: f("\x1B[42m", "\x1B[49m"),
-      bgYellow: f("\x1B[43m", "\x1B[49m"),
-      bgBlue: f("\x1B[44m", "\x1B[49m"),
-      bgMagenta: f("\x1B[45m", "\x1B[49m"),
-      bgCyan: f("\x1B[46m", "\x1B[49m"),
-      bgWhite: f("\x1B[47m", "\x1B[49m"),
-      blackBright: f("\x1B[90m", "\x1B[39m"),
-      redBright: f("\x1B[91m", "\x1B[39m"),
-      greenBright: f("\x1B[92m", "\x1B[39m"),
-      yellowBright: f("\x1B[93m", "\x1B[39m"),
-      blueBright: f("\x1B[94m", "\x1B[39m"),
-      magentaBright: f("\x1B[95m", "\x1B[39m"),
-      cyanBright: f("\x1B[96m", "\x1B[39m"),
-      whiteBright: f("\x1B[97m", "\x1B[39m"),
-      bgBlackBright: f("\x1B[100m", "\x1B[49m"),
-      bgRedBright: f("\x1B[101m", "\x1B[49m"),
-      bgGreenBright: f("\x1B[102m", "\x1B[49m"),
-      bgYellowBright: f("\x1B[103m", "\x1B[49m"),
-      bgBlueBright: f("\x1B[104m", "\x1B[49m"),
-      bgMagentaBright: f("\x1B[105m", "\x1B[49m"),
-      bgCyanBright: f("\x1B[106m", "\x1B[49m"),
-      bgWhiteBright: f("\x1B[107m", "\x1B[49m")
-    };
-  };
-  module.exports = createColors();
-  module.exports.createColors = createColors;
-});
-
 // node_modules/yoctocolors-cjs/index.js
 var require_yoctocolors_cjs = __commonJS((exports, module) => {
   var tty = __require("node:tty");
@@ -2193,21 +2123,21 @@ var require_yoctocolors_cjs = __commonJS((exports, module) => {
     const openCode = `\x1B[${open}m`;
     const closeCode = `\x1B[${close}m`;
     return (input) => {
-      const string2 = input + "";
-      let index = string2.indexOf(closeCode);
+      const string = input + "";
+      let index = string.indexOf(closeCode);
       if (index === -1) {
-        return openCode + string2 + closeCode;
+        return openCode + string + closeCode;
       }
       let result = openCode;
       let lastIndex = 0;
       const reopenOnNestedClose = close === 22;
       const replaceCode = (reopenOnNestedClose ? closeCode : "") + openCode;
       while (index !== -1) {
-        result += string2.slice(lastIndex, index) + replaceCode;
+        result += string.slice(lastIndex, index) + replaceCode;
         lastIndex = index + closeCode.length;
-        index = string2.indexOf(closeCode, lastIndex);
+        index = string.indexOf(closeCode, lastIndex);
       }
-      result += string2.slice(lastIndex) + closeCode;
+      result += string.slice(lastIndex) + closeCode;
       return result;
     };
   };
@@ -2310,7 +2240,7 @@ var require_ansi_regex = __commonJS((exports, module) => {
 // node_modules/strip-ansi/index.js
 var require_strip_ansi = __commonJS((exports, module) => {
   var ansiRegex = require_ansi_regex();
-  module.exports = (string2) => typeof string2 === "string" ? string2.replace(ansiRegex(), "") : string2;
+  module.exports = (string) => typeof string === "string" ? string.replace(ansiRegex(), "") : string;
 });
 
 // node_modules/is-fullwidth-code-point/index.js
@@ -2340,18 +2270,18 @@ var require_string_width = __commonJS((exports, module) => {
   var stripAnsi = require_strip_ansi();
   var isFullwidthCodePoint = require_is_fullwidth_code_point();
   var emojiRegex = require_emoji_regex();
-  var stringWidth = (string2) => {
-    if (typeof string2 !== "string" || string2.length === 0) {
+  var stringWidth = (string) => {
+    if (typeof string !== "string" || string.length === 0) {
       return 0;
     }
-    string2 = stripAnsi(string2);
-    if (string2.length === 0) {
+    string = stripAnsi(string);
+    if (string.length === 0) {
       return 0;
     }
-    string2 = string2.replace(emojiRegex(), "  ");
+    string = string.replace(emojiRegex(), "  ");
     let width = 0;
-    for (let i = 0;i < string2.length; i++) {
-      const code = string2.codePointAt(i);
+    for (let i = 0;i < string.length; i++) {
+      const code = string.codePointAt(i);
       if (code <= 31 || code >= 127 && code <= 159) {
         continue;
       }
@@ -3002,8 +2932,8 @@ var require_conversions = __commonJS((exports, module) => {
   };
   convert.rgb.hex = function(args) {
     const integer = ((Math.round(args[0]) & 255) << 16) + ((Math.round(args[1]) & 255) << 8) + (Math.round(args[2]) & 255);
-    const string2 = integer.toString(16).toUpperCase();
-    return "000000".substring(string2.length) + string2;
+    const string = integer.toString(16).toUpperCase();
+    return "000000".substring(string.length) + string;
   };
   convert.hex.rgb = function(args) {
     const match = args.toString(16).match(/[a-f0-9]{6}|[a-f0-9]{3}/i);
@@ -3183,8 +3113,8 @@ var require_conversions = __commonJS((exports, module) => {
   convert.gray.hex = function(gray) {
     const val = Math.round(gray[0] / 100 * 255) & 255;
     const integer = (val << 16) + (val << 8) + val;
-    const string2 = integer.toString(16).toUpperCase();
-    return "000000".substring(string2.length) + string2;
+    const string = integer.toString(16).toUpperCase();
+    return "000000".substring(string.length) + string;
   };
   convert.rgb.gray = function(rgb) {
     const val = (rgb[0] + rgb[1] + rgb[2]) / 3;
@@ -3231,15 +3161,15 @@ var require_route = __commonJS((exports, module) => {
     };
   }
   function wrapConversion(toModel, graph) {
-    const path2 = [graph[toModel].parent, toModel];
+    const path = [graph[toModel].parent, toModel];
     let fn = conversions[graph[toModel].parent][toModel];
     let cur = graph[toModel].parent;
     while (graph[cur].parent) {
-      path2.unshift(graph[cur].parent);
+      path.unshift(graph[cur].parent);
       fn = link(conversions[graph[cur].parent][cur], fn);
       cur = graph[cur].parent;
     }
-    fn.conversion = path2;
+    fn.conversion = path;
     return fn;
   }
   module.exports = function(fromModel) {
@@ -3333,11 +3263,11 @@ var require_ansi_styles = __commonJS((exports, module) => {
   };
   var ansi2ansi = (n) => n;
   var rgb2rgb = (r, g, b) => [r, g, b];
-  var setLazyProperty = (object2, property, get) => {
-    Object.defineProperty(object2, property, {
+  var setLazyProperty = (object, property, get) => {
+    Object.defineProperty(object, property, {
       get: () => {
         const value = get();
-        Object.defineProperty(object2, property, {
+        Object.defineProperty(object, property, {
           value,
           enumerable: true,
           configurable: true
@@ -3464,7 +3394,7 @@ var require_wrap_ansi = __commonJS((exports, module) => {
   ]);
   var END_CODE = 39;
   var wrapAnsi = (code) => `${ESCAPES.values().next().value}[${code}m`;
-  var wordLengths = (string2) => string2.split(" ").map((character) => stringWidth(character));
+  var wordLengths = (string) => string.split(" ").map((character) => stringWidth(character));
   var wrapWord = (rows, word, columns) => {
     const characters = [...word];
     let isInsideEscape = false;
@@ -3510,16 +3440,16 @@ var require_wrap_ansi = __commonJS((exports, module) => {
     }
     return words.slice(0, last).join(" ") + words.slice(last).join("");
   };
-  var exec = (string2, columns, options = {}) => {
-    if (options.trim !== false && string2.trim() === "") {
+  var exec = (string, columns, options = {}) => {
+    if (options.trim !== false && string.trim() === "") {
       return "";
     }
     let pre = "";
     let ret = "";
     let escapeCode;
-    const lengths = wordLengths(string2);
+    const lengths = wordLengths(string);
     let rows = [""];
-    for (const [index, word] of string2.split(" ").entries()) {
+    for (const [index, word] of string.split(" ").entries()) {
       if (options.trim !== false) {
         rows[rows.length - 1] = rows[rows.length - 1].trimLeft();
       }
@@ -3581,8 +3511,8 @@ var require_wrap_ansi = __commonJS((exports, module) => {
     }
     return ret;
   };
-  module.exports = (string2, columns, options) => {
-    return String(string2).normalize().replace(/\r\n/g, `
+  module.exports = (string, columns, options) => {
+    return String(string).normalize().replace(/\r\n/g, `
 `).split(`
 `).map((line) => exec(line, columns, options)).join(`
 `);
@@ -3708,8 +3638,76 @@ var require_lib = __commonJS((exports, module) => {
   }
   module.exports = MuteStream;
 });
-// package.json
-var version = "0.0.1";
+
+// node_modules/picocolors/picocolors.js
+var require_picocolors = __commonJS((exports, module) => {
+  var p = process || {};
+  var argv = p.argv || [];
+  var env = p.env || {};
+  var isColorSupported = !(!!env.NO_COLOR || argv.includes("--no-color")) && (!!env.FORCE_COLOR || argv.includes("--color") || p.platform === "win32" || (p.stdout || {}).isTTY && env.TERM !== "dumb" || !!env.CI);
+  var formatter = (open, close, replace = open) => (input) => {
+    let string = "" + input, index = string.indexOf(close, open.length);
+    return ~index ? open + replaceClose(string, close, replace, index) + close : open + string + close;
+  };
+  var replaceClose = (string, close, replace, index) => {
+    let result = "", cursor = 0;
+    do {
+      result += string.substring(cursor, index) + replace;
+      cursor = index + close.length;
+      index = string.indexOf(close, cursor);
+    } while (~index);
+    return result + string.substring(cursor);
+  };
+  var createColors = (enabled = isColorSupported) => {
+    let f = enabled ? formatter : () => String;
+    return {
+      isColorSupported: enabled,
+      reset: f("\x1B[0m", "\x1B[0m"),
+      bold: f("\x1B[1m", "\x1B[22m", "\x1B[22m\x1B[1m"),
+      dim: f("\x1B[2m", "\x1B[22m", "\x1B[22m\x1B[2m"),
+      italic: f("\x1B[3m", "\x1B[23m"),
+      underline: f("\x1B[4m", "\x1B[24m"),
+      inverse: f("\x1B[7m", "\x1B[27m"),
+      hidden: f("\x1B[8m", "\x1B[28m"),
+      strikethrough: f("\x1B[9m", "\x1B[29m"),
+      black: f("\x1B[30m", "\x1B[39m"),
+      red: f("\x1B[31m", "\x1B[39m"),
+      green: f("\x1B[32m", "\x1B[39m"),
+      yellow: f("\x1B[33m", "\x1B[39m"),
+      blue: f("\x1B[34m", "\x1B[39m"),
+      magenta: f("\x1B[35m", "\x1B[39m"),
+      cyan: f("\x1B[36m", "\x1B[39m"),
+      white: f("\x1B[37m", "\x1B[39m"),
+      gray: f("\x1B[90m", "\x1B[39m"),
+      bgBlack: f("\x1B[40m", "\x1B[49m"),
+      bgRed: f("\x1B[41m", "\x1B[49m"),
+      bgGreen: f("\x1B[42m", "\x1B[49m"),
+      bgYellow: f("\x1B[43m", "\x1B[49m"),
+      bgBlue: f("\x1B[44m", "\x1B[49m"),
+      bgMagenta: f("\x1B[45m", "\x1B[49m"),
+      bgCyan: f("\x1B[46m", "\x1B[49m"),
+      bgWhite: f("\x1B[47m", "\x1B[49m"),
+      blackBright: f("\x1B[90m", "\x1B[39m"),
+      redBright: f("\x1B[91m", "\x1B[39m"),
+      greenBright: f("\x1B[92m", "\x1B[39m"),
+      yellowBright: f("\x1B[93m", "\x1B[39m"),
+      blueBright: f("\x1B[94m", "\x1B[39m"),
+      magentaBright: f("\x1B[95m", "\x1B[39m"),
+      cyanBright: f("\x1B[96m", "\x1B[39m"),
+      whiteBright: f("\x1B[97m", "\x1B[39m"),
+      bgBlackBright: f("\x1B[100m", "\x1B[49m"),
+      bgRedBright: f("\x1B[101m", "\x1B[49m"),
+      bgGreenBright: f("\x1B[102m", "\x1B[49m"),
+      bgYellowBright: f("\x1B[103m", "\x1B[49m"),
+      bgBlueBright: f("\x1B[104m", "\x1B[49m"),
+      bgMagentaBright: f("\x1B[105m", "\x1B[49m"),
+      bgCyanBright: f("\x1B[106m", "\x1B[49m"),
+      bgWhiteBright: f("\x1B[107m", "\x1B[49m")
+    };
+  };
+  module.exports = createColors();
+  module.exports.createColors = createColors;
+});
 
 // node_modules/commander/esm.mjs
 var import__ = __toESM(require_commander(), 1);
@@ -3726,1366 +3724,6 @@ var {
   Option,
   Help
 } = import__.default;
-
-// src/generated/dokploy/core/ApiError.ts
-class ApiError extends Error {
-  url;
-  status;
-  statusText;
-  body;
-  request;
-  constructor(request, response, message) {
-    super(message);
-    this.name = "ApiError";
-    this.url = response.url;
-    this.status = response.status;
-    this.statusText = response.statusText;
-    this.body = response.body;
-    this.request = request;
-  }
-}
-// src/generated/dokploy/core/CancelablePromise.ts
-class CancelError extends Error {
-  constructor(message) {
-    super(message);
-    this.name = "CancelError";
-  }
-  get isCancelled() {
-    return true;
-  }
-}
-
-class CancelablePromise {
-  #isResolved;
-  #isRejected;
-  #isCancelled;
-  #cancelHandlers;
-  #promise;
-  #resolve;
-  #reject;
-  constructor(executor) {
-    this.#isResolved = false;
-    this.#isRejected = false;
-    this.#isCancelled = false;
-    this.#cancelHandlers = [];
-    this.#promise = new Promise((resolve, reject) => {
-      this.#resolve = resolve;
-      this.#reject = reject;
-      const onResolve = (value) => {
-        if (this.#isResolved || this.#isRejected || this.#isCancelled) {
-          return;
-        }
-        this.#isResolved = true;
-        if (this.#resolve)
-          this.#resolve(value);
-      };
-      const onReject = (reason) => {
-        if (this.#isResolved || this.#isRejected || this.#isCancelled) {
-          return;
-        }
-        this.#isRejected = true;
-        if (this.#reject)
-          this.#reject(reason);
-      };
-      const onCancel = (cancelHandler) => {
-        if (this.#isResolved || this.#isRejected || this.#isCancelled) {
-          return;
-        }
-        this.#cancelHandlers.push(cancelHandler);
-      };
-      Object.defineProperty(onCancel, "isResolved", {
-        get: () => this.#isResolved
-      });
-      Object.defineProperty(onCancel, "isRejected", {
-        get: () => this.#isRejected
-      });
-      Object.defineProperty(onCancel, "isCancelled", {
-        get: () => this.#isCancelled
-      });
-      return executor(onResolve, onReject, onCancel);
-    });
-  }
-  get [Symbol.toStringTag]() {
-    return "Cancellable Promise";
-  }
-  then(onFulfilled, onRejected) {
-    return this.#promise.then(onFulfilled, onRejected);
-  }
-  catch(onRejected) {
-    return this.#promise.catch(onRejected);
-  }
-  finally(onFinally) {
-    return this.#promise.finally(onFinally);
-  }
-  cancel() {
-    if (this.#isResolved || this.#isRejected || this.#isCancelled) {
-      return;
-    }
-    this.#isCancelled = true;
-    if (this.#cancelHandlers.length) {
-      try {
-        for (const cancelHandler of this.#cancelHandlers) {
-          cancelHandler();
-        }
-      } catch (error) {
-        console.warn("Cancellation threw an error", error);
-        return;
-      }
-    }
-    this.#cancelHandlers.length = 0;
-    if (this.#reject)
-      this.#reject(new CancelError("Request aborted"));
-  }
-  get isCancelled() {
-    return this.#isCancelled;
-  }
-}
-// src/generated/dokploy/core/OpenAPI.ts
-var OpenAPI = {
-  BASE: "",
-  VERSION: "1.0.0",
-  WITH_CREDENTIALS: false,
-  CREDENTIALS: "include",
-  TOKEN: undefined,
-  USERNAME: undefined,
-  PASSWORD: undefined,
-  HEADERS: undefined,
-  ENCODE_PATH: undefined
-};
-// src/generated/dokploy/core/request.ts
-var isDefined = (value) => {
-  return value !== undefined && value !== null;
-};
-var isString = (value) => {
-  return typeof value === "string";
-};
-var isStringWithValue = (value) => {
-  return isString(value) && value !== "";
-};
-var isBlob = (value) => {
-  return typeof value === "object" && typeof value.type === "string" && typeof value.stream === "function" && typeof value.arrayBuffer === "function" && typeof value.constructor === "function" && typeof value.constructor.name === "string" && /^(Blob|File)$/.test(value.constructor.name) && /^(Blob|File)$/.test(value[Symbol.toStringTag]);
-};
-var isFormData = (value) => {
-  return value instanceof FormData;
-};
-var base64 = (str) => {
-  try {
-    return btoa(str);
-  } catch (err) {
-    return Buffer.from(str).toString("base64");
-  }
-};
-var getQueryString = (params) => {
-  const qs = [];
-  const append = (key, value) => {
-    qs.push(`${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`);
-  };
-  const process2 = (key, value) => {
-    if (isDefined(value)) {
-      if (Array.isArray(value)) {
-        value.forEach((v) => {
-          process2(key, v);
-        });
-      } else if (typeof value === "object") {
-        Object.entries(value).forEach(([k, v]) => {
-          process2(`${key}[${k}]`, v);
-        });
-      } else {
-        append(key, value);
-      }
-    }
-  };
-  Object.entries(params).forEach(([key, value]) => {
-    process2(key, value);
-  });
-  if (qs.length > 0) {
-    return `?${qs.join("&")}`;
-  }
-  return "";
-};
-var getUrl = (config, options) => {
-  const encoder = config.ENCODE_PATH || encodeURI;
-  const path = options.url.replace("{api-version}", config.VERSION).replace(/{(.*?)}/g, (substring, group) => {
-    if (options.path?.hasOwnProperty(group)) {
-      return encoder(String(options.path[group]));
-    }
-    return substring;
-  });
-  const url = `${config.BASE}${path}`;
-  if (options.query) {
-    return `${url}${getQueryString(options.query)}`;
-  }
-  return url;
-};
-var getFormData = (options) => {
-  if (options.formData) {
-    const formData = new FormData;
-    const process2 = (key, value) => {
-      if (isString(value) || isBlob(value)) {
-        formData.append(key, value);
-      } else {
-        formData.append(key, JSON.stringify(value));
-      }
-    };
-    Object.entries(options.formData).filter(([_, value]) => isDefined(value)).forEach(([key, value]) => {
-      if (Array.isArray(value)) {
-        value.forEach((v) => process2(key, v));
-      } else {
-        process2(key, value);
-      }
-    });
-    return formData;
-  }
-  return;
-};
-var resolve = async (options, resolver) => {
-  if (typeof resolver === "function") {
-    return resolver(options);
-  }
-  return resolver;
-};
-var getHeaders = async (config, options) => {
-  const [token, username, password, additionalHeaders] = await Promise.all([
-    resolve(options, config.TOKEN),
-    resolve(options, config.USERNAME),
-    resolve(options, config.PASSWORD),
-    resolve(options, config.HEADERS)
-  ]);
-  const headers = Object.entries({
-    Accept: "application/json",
-    ...additionalHeaders,
-    ...options.headers
-  }).filter(([_, value]) => isDefined(value)).reduce((headers2, [key, value]) => ({
-    ...headers2,
-    [key]: String(value)
-  }), {});
-  if (isStringWithValue(token)) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-  if (isStringWithValue(username) && isStringWithValue(password)) {
-    const credentials = base64(`${username}:${password}`);
-    headers["Authorization"] = `Basic ${credentials}`;
-  }
-  if (options.body !== undefined) {
-    if (options.mediaType) {
-      headers["Content-Type"] = options.mediaType;
-    } else if (isBlob(options.body)) {
-      headers["Content-Type"] = options.body.type || "application/octet-stream";
-    } else if (isString(options.body)) {
-      headers["Content-Type"] = "text/plain";
-    } else if (!isFormData(options.body)) {
-      headers["Content-Type"] = "application/json";
-    }
-  }
-  return new Headers(headers);
-};
-var getRequestBody = (options) => {
-  if (options.body !== undefined) {
-    if (options.mediaType?.includes("/json")) {
-      return JSON.stringify(options.body);
-    } else if (isString(options.body) || isBlob(options.body) || isFormData(options.body)) {
-      return options.body;
-    } else {
-      return JSON.stringify(options.body);
-    }
-  }
-  return;
-};
-var sendRequest = async (config, options, url, body, formData, headers, onCancel) => {
-  const controller = new AbortController;
-  const request = {
-    headers,
-    body: body ?? formData,
-    method: options.method,
-    signal: controller.signal
-  };
-  if (config.WITH_CREDENTIALS) {
-    request.credentials = config.CREDENTIALS;
-  }
-  onCancel(() => controller.abort());
-  return await fetch(url, request);
-};
-var getResponseHeader = (response, responseHeader) => {
-  if (responseHeader) {
-    const content = response.headers.get(responseHeader);
-    if (isString(content)) {
-      return content;
-    }
-  }
-  return;
-};
-var getResponseBody = async (response) => {
-  if (response.status !== 204) {
-    try {
-      const contentType = response.headers.get("Content-Type");
-      if (contentType) {
-        const jsonTypes = ["application/json", "application/problem+json"];
-        const isJSON = jsonTypes.some((type) => contentType.toLowerCase().startsWith(type));
-        if (isJSON) {
-          return await response.json();
-        } else {
-          return await response.text();
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  return;
-};
-var catchErrorCodes = (options, result) => {
-  const errors = {
-    400: "Bad Request",
-    401: "Unauthorized",
-    403: "Forbidden",
-    404: "Not Found",
-    500: "Internal Server Error",
-    502: "Bad Gateway",
-    503: "Service Unavailable",
-    ...options.errors
-  };
-  const error = errors[result.status];
-  if (error) {
-    throw new ApiError(options, result, error);
-  }
-  if (!result.ok) {
-    const errorStatus = result.status ?? "unknown";
-    const errorStatusText = result.statusText ?? "unknown";
-    const errorBody = (() => {
-      try {
-        return JSON.stringify(result.body, null, 2);
-      } catch (e) {
-        return;
-      }
-    })();
-    throw new ApiError(options, result, `Generic Error: status: ${errorStatus}; status text: ${errorStatusText}; body: ${errorBody}`);
-  }
-};
-var request = (config, options) => {
-  return new CancelablePromise(async (resolve2, reject, onCancel) => {
-    try {
-      const url = getUrl(config, options);
-      const formData = getFormData(options);
-      const body = getRequestBody(options);
-      const headers = await getHeaders(config, options);
-      if (!onCancel.isCancelled) {
-        const response = await sendRequest(config, options, url, body, formData, headers, onCancel);
-        const responseBody = await getResponseBody(response);
-        const responseHeader = getResponseHeader(response, options.responseHeader);
-        const result = {
-          url,
-          ok: response.ok,
-          status: response.status,
-          statusText: response.statusText,
-          body: responseHeader ?? responseBody
-        };
-        catchErrorCodes(options, result);
-        resolve2(result.body);
-      }
-    } catch (error) {
-      reject(error);
-    }
-  });
-};
-// src/generated/dokploy/services/ApplicationService.ts
-class ApplicationService {
-  static applicationCreate(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.create",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationOne(applicationId) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/application.one",
-      query: {
-        applicationId
-      }
-    });
-  }
-  static applicationReload(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.reload",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationDelete(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.delete",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationStop(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.stop",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationStart(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.start",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationRedeploy(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.redeploy",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationSaveEnvironment(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.saveEnvironment",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationSaveBuildType(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.saveBuildType",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationSaveGithubProvider(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.saveGithubProvider",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationSaveGitlabProvider(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.saveGitlabProvider",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationSaveBitbucketProvider(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.saveBitbucketProvider",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationSaveGiteaProvider(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.saveGiteaProvider",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationSaveDockerProvider(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.saveDockerProvider",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationSaveGitProdiver(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.saveGitProdiver",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationDisconnectGitProvider(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.disconnectGitProvider",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationMarkRunning(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.markRunning",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationUpdate(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.update",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationRefreshToken(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.refreshToken",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationDeploy(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.deploy",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationCleanQueues(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.cleanQueues",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationReadTraefikConfig(applicationId) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/application.readTraefikConfig",
-      query: {
-        applicationId
-      }
-    });
-  }
-  static applicationUpdateTraefikConfig(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.updateTraefikConfig",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationReadAppMonitoring(appName) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/application.readAppMonitoring",
-      query: {
-        appName
-      }
-    });
-  }
-  static applicationMove(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.move",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static applicationCancelDeployment(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/application.cancelDeployment",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-}
-// src/generated/dokploy/services/ComposeService.ts
-class ComposeService {
-  static composeCreate(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.create",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeOne(composeId) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/compose.one",
-      query: {
-        composeId
-      }
-    });
-  }
-  static composeUpdate(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.update",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeDelete(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.delete",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeCleanQueues(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.cleanQueues",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeLoadServices(composeId, type) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/compose.loadServices",
-      query: {
-        composeId,
-        type
-      }
-    });
-  }
-  static composeLoadMountsByService(composeId, serviceName) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/compose.loadMountsByService",
-      query: {
-        composeId,
-        serviceName
-      }
-    });
-  }
-  static composeFetchSourceType(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.fetchSourceType",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeRandomizeCompose(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.randomizeCompose",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeIsolatedDeployment(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.isolatedDeployment",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeGetConvertedCompose(composeId) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/compose.getConvertedCompose",
-      query: {
-        composeId
-      }
-    });
-  }
-  static composeDeploy(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.deploy",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeRedeploy(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.redeploy",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeStop(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.stop",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeStart(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.start",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeGetDefaultCommand(composeId) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/compose.getDefaultCommand",
-      query: {
-        composeId
-      }
-    });
-  }
-  static composeRefreshToken(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.refreshToken",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeDeployTemplate(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.deployTemplate",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeTemplates(baseUrl) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/compose.templates",
-      query: {
-        baseUrl
-      }
-    });
-  }
-  static composeGetTags(baseUrl) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/compose.getTags",
-      query: {
-        baseUrl
-      }
-    });
-  }
-  static composeDisconnectGitProvider(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.disconnectGitProvider",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeMove(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.move",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeProcessTemplate(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.processTemplate",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeImport(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.import",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static composeCancelDeployment(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/compose.cancelDeployment",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-}
-// src/generated/dokploy/services/ProjectService.ts
-class ProjectService {
-  static projectCreate(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/project.create",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static projectOne(projectId) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/project.one",
-      query: {
-        projectId
-      }
-    });
-  }
-  static projectAll() {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/project.all"
-    });
-  }
-  static projectRemove(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/project.remove",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static projectUpdate(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/project.update",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static projectDuplicate(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/project.duplicate",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-}
-// src/generated/dokploy/services/UserService.ts
-class UserService {
-  static userAll() {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/user.all"
-    });
-  }
-  static userOne(userId) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/user.one",
-      query: {
-        userId
-      }
-    });
-  }
-  static userGet() {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/user.get"
-    });
-  }
-  static userHaveRootAccess() {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/user.haveRootAccess"
-    });
-  }
-  static userGetBackups() {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/user.getBackups"
-    });
-  }
-  static userGetServerMetrics() {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/user.getServerMetrics"
-    });
-  }
-  static userUpdate(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/user.update",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static userGetUserByToken(token) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/user.getUserByToken",
-      query: {
-        token
-      }
-    });
-  }
-  static userGetMetricsToken() {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/user.getMetricsToken"
-    });
-  }
-  static userRemove(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/user.remove",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static userAssignPermissions(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/user.assignPermissions",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static userGetInvitations() {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/user.getInvitations"
-    });
-  }
-  static userGetContainerMetrics(url, token, appName, dataPoints) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/user.getContainerMetrics",
-      query: {
-        url,
-        token,
-        appName,
-        dataPoints
-      }
-    });
-  }
-  static userGenerateToken() {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/user.generateToken"
-    });
-  }
-  static userDeleteApiKey(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/user.deleteApiKey",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static userCreateApiKey(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/user.createApiKey",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-  static userCheckUserOrganizations(userId) {
-    return request(OpenAPI, {
-      method: "GET",
-      url: "/user.checkUserOrganizations",
-      query: {
-        userId
-      }
-    });
-  }
-  static userSendInvitation(requestBody) {
-    return request(OpenAPI, {
-      method: "POST",
-      url: "/user.sendInvitation",
-      body: requestBody,
-      mediaType: "application/json"
-    });
-  }
-}
-// node_modules/valibot/dist/index.js
-var store;
-function getGlobalConfig(config2) {
-  return {
-    lang: config2?.lang ?? store?.lang,
-    message: config2?.message,
-    abortEarly: config2?.abortEarly ?? store?.abortEarly,
-    abortPipeEarly: config2?.abortPipeEarly ?? store?.abortPipeEarly
-  };
-}
-var store2;
-function getGlobalMessage(lang) {
-  return store2?.get(lang);
-}
-var store3;
-function getSchemaMessage(lang) {
-  return store3?.get(lang);
-}
-var store4;
-function getSpecificMessage(reference, lang) {
-  return store4?.get(reference)?.get(lang);
-}
-function _stringify(input) {
-  const type = typeof input;
-  if (type === "string") {
-    return `"${input}"`;
-  }
-  if (type === "number" || type === "bigint" || type === "boolean") {
-    return `${input}`;
-  }
-  if (type === "object" || type === "function") {
-    return (input && Object.getPrototypeOf(input)?.constructor?.name) ?? "null";
-  }
-  return type;
-}
-function _addIssue(context, label, dataset, config2, other) {
-  const input = other && "input" in other ? other.input : dataset.value;
-  const expected = other?.expected ?? context.expects ?? null;
-  const received = other?.received ?? _stringify(input);
-  const issue = {
-    kind: context.kind,
-    type: context.type,
-    input,
-    expected,
-    received,
-    message: `Invalid ${label}: ${expected ? `Expected ${expected} but r` : "R"}eceived ${received}`,
-    requirement: context.requirement,
-    path: other?.path,
-    issues: other?.issues,
-    lang: config2.lang,
-    abortEarly: config2.abortEarly,
-    abortPipeEarly: config2.abortPipeEarly
-  };
-  const isSchema = context.kind === "schema";
-  const message2 = other?.message ?? context.message ?? getSpecificMessage(context.reference, issue.lang) ?? (isSchema ? getSchemaMessage(issue.lang) : null) ?? config2.message ?? getGlobalMessage(issue.lang);
-  if (message2 !== undefined) {
-    issue.message = typeof message2 === "function" ? message2(issue) : message2;
-  }
-  if (isSchema) {
-    dataset.typed = false;
-  }
-  if (dataset.issues) {
-    dataset.issues.push(issue);
-  } else {
-    dataset.issues = [issue];
-  }
-}
-function _getStandardProps(context) {
-  return {
-    version: 1,
-    vendor: "valibot",
-    validate(value2) {
-      return context["~run"]({ value: value2 }, getGlobalConfig());
-    }
-  };
-}
-var ValiError = class extends Error {
-  constructor(issues) {
-    super(issues[0].message);
-    this.name = "ValiError";
-    this.issues = issues;
-  }
-};
-function minLength(requirement, message2) {
-  return {
-    kind: "validation",
-    type: "min_length",
-    reference: minLength,
-    async: false,
-    expects: `>=${requirement}`,
-    requirement,
-    message: message2,
-    "~run"(dataset, config2) {
-      if (dataset.typed && dataset.value.length < this.requirement) {
-        _addIssue(this, "length", dataset, config2, {
-          received: `${dataset.value.length}`
-        });
-      }
-      return dataset;
-    }
-  };
-}
-function transform(operation) {
-  return {
-    kind: "transformation",
-    type: "transform",
-    reference: transform,
-    async: false,
-    operation,
-    "~run"(dataset) {
-      dataset.value = this.operation(dataset.value);
-      return dataset;
-    }
-  };
-}
-function url(message2) {
-  return {
-    kind: "validation",
-    type: "url",
-    reference: url,
-    async: false,
-    expects: null,
-    requirement(input) {
-      try {
-        new URL(input);
-        return true;
-      } catch {
-        return false;
-      }
-    },
-    message: message2,
-    "~run"(dataset, config2) {
-      if (dataset.typed && !this.requirement(dataset.value)) {
-        _addIssue(this, "URL", dataset, config2);
-      }
-      return dataset;
-    }
-  };
-}
-function getFallback(schema, dataset, config2) {
-  return typeof schema.fallback === "function" ? schema.fallback(dataset, config2) : schema.fallback;
-}
-function getDefault(schema, dataset, config2) {
-  return typeof schema.default === "function" ? schema.default(dataset, config2) : schema.default;
-}
-function object(entries2, message2) {
-  return {
-    kind: "schema",
-    type: "object",
-    reference: object,
-    expects: "Object",
-    async: false,
-    entries: entries2,
-    message: message2,
-    get "~standard"() {
-      return _getStandardProps(this);
-    },
-    "~run"(dataset, config2) {
-      const input = dataset.value;
-      if (input && typeof input === "object") {
-        dataset.typed = true;
-        dataset.value = {};
-        for (const key in this.entries) {
-          const valueSchema = this.entries[key];
-          if (key in input || (valueSchema.type === "exact_optional" || valueSchema.type === "optional" || valueSchema.type === "nullish") && valueSchema.default !== undefined) {
-            const value2 = key in input ? input[key] : getDefault(valueSchema);
-            const valueDataset = valueSchema["~run"]({ value: value2 }, config2);
-            if (valueDataset.issues) {
-              const pathItem = {
-                type: "object",
-                origin: "value",
-                input,
-                key,
-                value: value2
-              };
-              for (const issue of valueDataset.issues) {
-                if (issue.path) {
-                  issue.path.unshift(pathItem);
-                } else {
-                  issue.path = [pathItem];
-                }
-                dataset.issues?.push(issue);
-              }
-              if (!dataset.issues) {
-                dataset.issues = valueDataset.issues;
-              }
-              if (config2.abortEarly) {
-                dataset.typed = false;
-                break;
-              }
-            }
-            if (!valueDataset.typed) {
-              dataset.typed = false;
-            }
-            dataset.value[key] = valueDataset.value;
-          } else if (valueSchema.fallback !== undefined) {
-            dataset.value[key] = getFallback(valueSchema);
-          } else if (valueSchema.type !== "exact_optional" && valueSchema.type !== "optional" && valueSchema.type !== "nullish") {
-            _addIssue(this, "key", dataset, config2, {
-              input: undefined,
-              expected: `"${key}"`,
-              path: [
-                {
-                  type: "object",
-                  origin: "key",
-                  input,
-                  key,
-                  value: input[key]
-                }
-              ]
-            });
-            if (config2.abortEarly) {
-              break;
-            }
-          }
-        }
-      } else {
-        _addIssue(this, "type", dataset, config2);
-      }
-      return dataset;
-    }
-  };
-}
-function optional(wrapped, default_) {
-  return {
-    kind: "schema",
-    type: "optional",
-    reference: optional,
-    expects: `(${wrapped.expects} | undefined)`,
-    async: false,
-    wrapped,
-    default: default_,
-    get "~standard"() {
-      return _getStandardProps(this);
-    },
-    "~run"(dataset, config2) {
-      if (dataset.value === undefined) {
-        if (this.default !== undefined) {
-          dataset.value = getDefault(this, dataset, config2);
-        }
-        if (dataset.value === undefined) {
-          dataset.typed = true;
-          return dataset;
-        }
-      }
-      return this.wrapped["~run"](dataset, config2);
-    }
-  };
-}
-function string(message2) {
-  return {
-    kind: "schema",
-    type: "string",
-    reference: string,
-    expects: "string",
-    async: false,
-    message: message2,
-    get "~standard"() {
-      return _getStandardProps(this);
-    },
-    "~run"(dataset, config2) {
-      if (typeof dataset.value === "string") {
-        dataset.typed = true;
-      } else {
-        _addIssue(this, "type", dataset, config2);
-      }
-      return dataset;
-    }
-  };
-}
-function parse(schema, input, config2) {
-  const dataset = schema["~run"]({ value: input }, getGlobalConfig(config2));
-  if (dataset.issues) {
-    throw new ValiError(dataset.issues);
-  }
-  return dataset.value;
-}
-function partial(schema, keys) {
-  const entries2 = {};
-  for (const key in schema.entries) {
-    entries2[key] = !keys || keys.includes(key) ? optional(schema.entries[key]) : schema.entries[key];
-  }
-  return {
-    ...schema,
-    entries: entries2,
-    get "~standard"() {
-      return _getStandardProps(this);
-    }
-  };
-}
-function pipe(...pipe2) {
-  return {
-    ...pipe2[0],
-    pipe: pipe2,
-    get "~standard"() {
-      return _getStandardProps(this);
-    },
-    "~run"(dataset, config2) {
-      for (const item of pipe2) {
-        if (item.kind !== "metadata") {
-          if (dataset.issues && (item.kind === "schema" || item.kind === "transformation")) {
-            dataset.typed = false;
-            break;
-          }
-          if (!dataset.issues || !config2.abortEarly && !config2.abortPipeEarly) {
-            dataset = item["~run"](dataset, config2);
-          }
-        }
-      }
-      return dataset;
-    }
-  };
-}
-function safeParse(schema, input, config2) {
-  const dataset = schema["~run"]({ value: input }, getGlobalConfig(config2));
-  return {
-    typed: dataset.typed,
-    success: !dataset.issues,
-    output: dataset.value,
-    issues: dataset.issues
-  };
-}
-
-// src/config.ts
-import fs from "node:fs";
-import path from "node:path";
-var import_picocolors = __toESM(require_picocolors(), 1);
-import { fileURLToPath } from "node:url";
-var __filename2 = fileURLToPath(import.meta.url);
-var __dirname2 = path.dirname(__filename2);
-var configPath = path.resolve(__dirname2, "..", "./config.json");
-var ConfigSchema = partial(object({
-  url: string(),
-  token: string()
-}));
-var configCache = null;
-function getConfig() {
-  if (configCache)
-    return configCache;
-  let rawConfig;
-  try {
-    rawConfig = fs.readFileSync(configPath).toString();
-    const parsedConfig = JSON.parse(rawConfig);
-    configCache = parse(ConfigSchema, parsedConfig);
-  } catch (error) {
-    console.warn("Could not read config, creating a new one...");
-    rawConfig = "{}";
-    configCache = {};
-    fs.writeFileSync(configPath, rawConfig);
-  }
-  return configCache;
-}
-function saveConfig() {
-  try {
-    fs.writeFileSync(configPath, JSON.stringify(configCache, null, 2));
-  } catch (error) {
-    console.error("Could not save config:", error);
-  }
-}
-function ensureConfig() {
-  configCache = getConfig();
-}
-function setMany(newConfig) {
-  const config = configCache || getConfig();
-  configCache = { ...config, ...newConfig };
-  saveConfig();
-}
-function getAll() {
-  return getConfig();
-}
-function initOpenAPIConfig() {
-  const { url: url2, token } = getAll();
-  if (!url2 || !token) {
-    console.error(import_picocolors.default.red("Invalid configuration file. Please authenticate again using the 'login' command."));
-    process.exit(1);
-  }
-  OpenAPI.BASE = `${url2}/api`;
-  OpenAPI.TOKEN = token;
-  OpenAPI.HEADERS = {
-    "x-api-key": token
-  };
-}
-
-// src/commands/authentication.ts
-var import_picocolors2 = __toESM(require_picocolors(), 1);
 
 // node_modules/@inquirer/core/dist/esm/lib/key.js
 var isUpKey = (key) => key.name === "up";
@@ -5127,7 +3765,7 @@ import { AsyncResource as AsyncResource2 } from "node:async_hooks";
 import { AsyncLocalStorage, AsyncResource } from "node:async_hooks";
 var hookStorage = new AsyncLocalStorage;
 function createStore(rl) {
-  const store5 = {
+  const store = {
     rl,
     hooks: [],
     hooksCleanup: [],
@@ -5135,62 +3773,62 @@ function createStore(rl) {
     index: 0,
     handleChange() {}
   };
-  return store5;
+  return store;
 }
 function withHooks(rl, cb) {
-  const store5 = createStore(rl);
-  return hookStorage.run(store5, () => {
+  const store = createStore(rl);
+  return hookStorage.run(store, () => {
     function cycle(render) {
-      store5.handleChange = () => {
-        store5.index = 0;
+      store.handleChange = () => {
+        store.index = 0;
         render();
       };
-      store5.handleChange();
+      store.handleChange();
     }
     return cb(cycle);
   });
 }
 function getStore() {
-  const store5 = hookStorage.getStore();
-  if (!store5) {
+  const store = hookStorage.getStore();
+  if (!store) {
     throw new HookError("[Inquirer] Hook functions can only be called from within a prompt");
   }
-  return store5;
+  return store;
 }
 function readline() {
   return getStore().rl;
 }
 function withUpdates(fn) {
   const wrapped = (...args) => {
-    const store5 = getStore();
+    const store = getStore();
     let shouldUpdate = false;
-    const oldHandleChange = store5.handleChange;
-    store5.handleChange = () => {
+    const oldHandleChange = store.handleChange;
+    store.handleChange = () => {
       shouldUpdate = true;
     };
     const returnValue = fn(...args);
     if (shouldUpdate) {
       oldHandleChange();
     }
-    store5.handleChange = oldHandleChange;
+    store.handleChange = oldHandleChange;
     return returnValue;
   };
   return AsyncResource.bind(wrapped);
 }
 function withPointer(cb) {
-  const store5 = getStore();
-  const { index } = store5;
+  const store = getStore();
+  const { index } = store;
   const pointer = {
     get() {
-      return store5.hooks[index];
+      return store.hooks[index];
     },
     set(value) {
-      store5.hooks[index] = value;
+      store.hooks[index] = value;
     },
-    initialized: index in store5.hooks
+    initialized: index in store.hooks
   };
   const returnValue = cb(pointer);
-  store5.index++;
+  store.index++;
   return returnValue;
 }
 function handleChange() {
@@ -5198,33 +3836,33 @@ function handleChange() {
 }
 var effectScheduler = {
   queue(cb) {
-    const store5 = getStore();
-    const { index } = store5;
-    store5.hooksEffect.push(() => {
-      store5.hooksCleanup[index]?.();
+    const store = getStore();
+    const { index } = store;
+    store.hooksEffect.push(() => {
+      store.hooksCleanup[index]?.();
       const cleanFn = cb(readline());
       if (cleanFn != null && typeof cleanFn !== "function") {
         throw new ValidationError("useEffect return value must be a cleanup function or nothing.");
       }
-      store5.hooksCleanup[index] = cleanFn;
+      store.hooksCleanup[index] = cleanFn;
     });
   },
   run() {
-    const store5 = getStore();
+    const store = getStore();
     withUpdates(() => {
-      store5.hooksEffect.forEach((effect) => {
+      store.hooksEffect.forEach((effect) => {
         effect();
       });
-      store5.hooksEffect.length = 0;
+      store.hooksEffect.length = 0;
     })();
   },
   clearAll() {
-    const store5 = getStore();
-    store5.hooksCleanup.forEach((cleanFn) => {
+    const store = getStore();
+    store.hooksCleanup.forEach((cleanFn) => {
       cleanFn?.();
     });
-    store5.hooksEffect.length = 0;
-    store5.hooksCleanup.length = 0;
+    store.hooksEffect.length = 0;
+    store.hooksCleanup.length = 0;
   }
 };
 
@@ -6039,13 +4677,13 @@ class ScreenManager {
 // node_modules/@inquirer/core/dist/esm/lib/promise-polyfill.js
 class PromisePolyfill extends Promise {
   static withResolver() {
-    let resolve2;
+    let resolve;
     let reject;
     const promise = new Promise((res, rej) => {
-      resolve2 = res;
+      resolve = res;
       reject = rej;
     });
-    return { promise, resolve: resolve2, reject };
+    return { promise, resolve, reject };
   }
 }
 
@@ -6079,7 +4717,7 @@ function createPrompt(view) {
       output
     });
     const screen = new ScreenManager(rl);
-    const { promise, resolve: resolve2, reject } = PromisePolyfill.withResolver();
+    const { promise, resolve, reject } = PromisePolyfill.withResolver();
     const cancel = () => reject(new CancelPromptError);
     if (signal) {
       const abort = () => reject(new AbortPromptError({ cause: signal.reason }));
@@ -6106,7 +4744,7 @@ function createPrompt(view) {
       cycle(() => {
         try {
           const nextView = view(config, (value) => {
-            setImmediate(() => resolve2(value));
+            setImmediate(() => resolve(value));
           });
           if (nextView === undefined) {
             const callerFilename = callSites[1]?.getFileName();
@@ -6420,6 +5058,1368 @@ ${theme.style.description(selectedChoice.description)}` : ``;
 ${page}${helpTipBottom}${choiceDescription}${cursorHide}`;
 });
 // src/commands/authentication.ts
+var import_picocolors2 = __toESM(require_picocolors(), 1);
+
+// node_modules/valibot/dist/index.js
+var store;
+function getGlobalConfig(config2) {
+  return {
+    lang: config2?.lang ?? store?.lang,
+    message: config2?.message,
+    abortEarly: config2?.abortEarly ?? store?.abortEarly,
+    abortPipeEarly: config2?.abortPipeEarly ?? store?.abortPipeEarly
+  };
+}
+var store2;
+function getGlobalMessage(lang) {
+  return store2?.get(lang);
+}
+var store3;
+function getSchemaMessage(lang) {
+  return store3?.get(lang);
+}
+var store4;
+function getSpecificMessage(reference, lang) {
+  return store4?.get(reference)?.get(lang);
+}
+function _stringify(input) {
+  const type = typeof input;
+  if (type === "string") {
+    return `"${input}"`;
+  }
+  if (type === "number" || type === "bigint" || type === "boolean") {
+    return `${input}`;
+  }
+  if (type === "object" || type === "function") {
+    return (input && Object.getPrototypeOf(input)?.constructor?.name) ?? "null";
+  }
+  return type;
+}
+function _addIssue(context, label, dataset, config2, other) {
+  const input = other && "input" in other ? other.input : dataset.value;
+  const expected = other?.expected ?? context.expects ?? null;
+  const received = other?.received ?? _stringify(input);
+  const issue = {
+    kind: context.kind,
+    type: context.type,
+    input,
+    expected,
+    received,
+    message: `Invalid ${label}: ${expected ? `Expected ${expected} but r` : "R"}eceived ${received}`,
+    requirement: context.requirement,
+    path: other?.path,
+    issues: other?.issues,
+    lang: config2.lang,
+    abortEarly: config2.abortEarly,
+    abortPipeEarly: config2.abortPipeEarly
+  };
+  const isSchema = context.kind === "schema";
+  const message2 = other?.message ?? context.message ?? getSpecificMessage(context.reference, issue.lang) ?? (isSchema ? getSchemaMessage(issue.lang) : null) ?? config2.message ?? getGlobalMessage(issue.lang);
+  if (message2 !== undefined) {
+    issue.message = typeof message2 === "function" ? message2(issue) : message2;
+  }
+  if (isSchema) {
+    dataset.typed = false;
+  }
+  if (dataset.issues) {
+    dataset.issues.push(issue);
+  } else {
+    dataset.issues = [issue];
+  }
+}
+function _getStandardProps(context) {
+  return {
+    version: 1,
+    vendor: "valibot",
+    validate(value2) {
+      return context["~run"]({ value: value2 }, getGlobalConfig());
+    }
+  };
+}
+var ValiError = class extends Error {
+  constructor(issues) {
+    super(issues[0].message);
+    this.name = "ValiError";
+    this.issues = issues;
+  }
+};
+function minLength(requirement, message2) {
+  return {
+    kind: "validation",
+    type: "min_length",
+    reference: minLength,
+    async: false,
+    expects: `>=${requirement}`,
+    requirement,
+    message: message2,
+    "~run"(dataset, config2) {
+      if (dataset.typed && dataset.value.length < this.requirement) {
+        _addIssue(this, "length", dataset, config2, {
+          received: `${dataset.value.length}`
+        });
+      }
+      return dataset;
+    }
+  };
+}
+function transform(operation) {
+  return {
+    kind: "transformation",
+    type: "transform",
+    reference: transform,
+    async: false,
+    operation,
+    "~run"(dataset) {
+      dataset.value = this.operation(dataset.value);
+      return dataset;
+    }
+  };
+}
+function url(message2) {
+  return {
+    kind: "validation",
+    type: "url",
+    reference: url,
+    async: false,
+    expects: null,
+    requirement(input) {
+      try {
+        new URL(input);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    message: message2,
+    "~run"(dataset, config2) {
+      if (dataset.typed && !this.requirement(dataset.value)) {
+        _addIssue(this, "URL", dataset, config2);
+      }
+      return dataset;
+    }
+  };
+}
+function getFallback(schema, dataset, config2) {
+  return typeof schema.fallback === "function" ? schema.fallback(dataset, config2) : schema.fallback;
+}
+function getDefault(schema, dataset, config2) {
+  return typeof schema.default === "function" ? schema.default(dataset, config2) : schema.default;
+}
+function object(entries2, message2) {
+  return {
+    kind: "schema",
+    type: "object",
+    reference: object,
+    expects: "Object",
+    async: false,
+    entries: entries2,
+    message: message2,
+    get "~standard"() {
+      return _getStandardProps(this);
+    },
+    "~run"(dataset, config2) {
+      const input = dataset.value;
+      if (input && typeof input === "object") {
+        dataset.typed = true;
+        dataset.value = {};
+        for (const key2 in this.entries) {
+          const valueSchema = this.entries[key2];
+          if (key2 in input || (valueSchema.type === "exact_optional" || valueSchema.type === "optional" || valueSchema.type === "nullish") && valueSchema.default !== undefined) {
+            const value2 = key2 in input ? input[key2] : getDefault(valueSchema);
+            const valueDataset = valueSchema["~run"]({ value: value2 }, config2);
+            if (valueDataset.issues) {
+              const pathItem = {
+                type: "object",
+                origin: "value",
+                input,
+                key: key2,
+                value: value2
+              };
+              for (const issue of valueDataset.issues) {
+                if (issue.path) {
+                  issue.path.unshift(pathItem);
+                } else {
+                  issue.path = [pathItem];
+                }
+                dataset.issues?.push(issue);
+              }
+              if (!dataset.issues) {
+                dataset.issues = valueDataset.issues;
+              }
+              if (config2.abortEarly) {
+                dataset.typed = false;
+                break;
+              }
+            }
+            if (!valueDataset.typed) {
+              dataset.typed = false;
+            }
+            dataset.value[key2] = valueDataset.value;
+          } else if (valueSchema.fallback !== undefined) {
+            dataset.value[key2] = getFallback(valueSchema);
+          } else if (valueSchema.type !== "exact_optional" && valueSchema.type !== "optional" && valueSchema.type !== "nullish") {
+            _addIssue(this, "key", dataset, config2, {
+              input: undefined,
+              expected: `"${key2}"`,
+              path: [
+                {
+                  type: "object",
+                  origin: "key",
+                  input,
+                  key: key2,
+                  value: input[key2]
+                }
+              ]
+            });
+            if (config2.abortEarly) {
+              break;
+            }
+          }
+        }
+      } else {
+        _addIssue(this, "type", dataset, config2);
+      }
+      return dataset;
+    }
+  };
+}
+function optional(wrapped, default_) {
+  return {
+    kind: "schema",
+    type: "optional",
+    reference: optional,
+    expects: `(${wrapped.expects} | undefined)`,
+    async: false,
+    wrapped,
+    default: default_,
+    get "~standard"() {
+      return _getStandardProps(this);
+    },
+    "~run"(dataset, config2) {
+      if (dataset.value === undefined) {
+        if (this.default !== undefined) {
+          dataset.value = getDefault(this, dataset, config2);
+        }
+        if (dataset.value === undefined) {
+          dataset.typed = true;
+          return dataset;
+        }
+      }
+      return this.wrapped["~run"](dataset, config2);
+    }
+  };
+}
+function string(message2) {
+  return {
+    kind: "schema",
+    type: "string",
+    reference: string,
+    expects: "string",
+    async: false,
+    message: message2,
+    get "~standard"() {
+      return _getStandardProps(this);
+    },
+    "~run"(dataset, config2) {
+      if (typeof dataset.value === "string") {
+        dataset.typed = true;
+      } else {
+        _addIssue(this, "type", dataset, config2);
+      }
+      return dataset;
+    }
+  };
+}
+function parse(schema, input, config2) {
+  const dataset = schema["~run"]({ value: input }, getGlobalConfig(config2));
+  if (dataset.issues) {
+    throw new ValiError(dataset.issues);
+  }
+  return dataset.value;
+}
+function partial(schema, keys) {
+  const entries2 = {};
+  for (const key2 in schema.entries) {
+    entries2[key2] = !keys || keys.includes(key2) ? optional(schema.entries[key2]) : schema.entries[key2];
+  }
+  return {
+    ...schema,
+    entries: entries2,
+    get "~standard"() {
+      return _getStandardProps(this);
+    }
+  };
+}
+function pipe(...pipe2) {
+  return {
+    ...pipe2[0],
+    pipe: pipe2,
+    get "~standard"() {
+      return _getStandardProps(this);
+    },
+    "~run"(dataset, config2) {
+      for (const item of pipe2) {
+        if (item.kind !== "metadata") {
+          if (dataset.issues && (item.kind === "schema" || item.kind === "transformation")) {
+            dataset.typed = false;
+            break;
+          }
+          if (!dataset.issues || !config2.abortEarly && !config2.abortPipeEarly) {
+            dataset = item["~run"](dataset, config2);
+          }
+        }
+      }
+      return dataset;
+    }
+  };
+}
+function safeParse(schema, input, config2) {
+  const dataset = schema["~run"]({ value: input }, getGlobalConfig(config2));
+  return {
+    typed: dataset.typed,
+    success: !dataset.issues,
+    output: dataset.value,
+    issues: dataset.issues
+  };
+}
+
+// src/config.ts
+var import_picocolors = __toESM(require_picocolors(), 1);
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+// src/generated/dokploy/core/ApiError.ts
+class ApiError extends Error {
+  url;
+  status;
+  statusText;
+  body;
+  request;
+  constructor(request, response, message) {
+    super(message);
+    this.name = "ApiError";
+    this.url = response.url;
+    this.status = response.status;
+    this.statusText = response.statusText;
+    this.body = response.body;
+    this.request = request;
+  }
+}
+// src/generated/dokploy/core/CancelablePromise.ts
+class CancelError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "CancelError";
+  }
+  get isCancelled() {
+    return true;
+  }
+}
+
+class CancelablePromise {
+  #isResolved;
+  #isRejected;
+  #isCancelled;
+  #cancelHandlers;
+  #promise;
+  #resolve;
+  #reject;
+  constructor(executor) {
+    this.#isResolved = false;
+    this.#isRejected = false;
+    this.#isCancelled = false;
+    this.#cancelHandlers = [];
+    this.#promise = new Promise((resolve, reject) => {
+      this.#resolve = resolve;
+      this.#reject = reject;
+      const onResolve = (value) => {
+        if (this.#isResolved || this.#isRejected || this.#isCancelled) {
+          return;
+        }
+        this.#isResolved = true;
+        if (this.#resolve)
+          this.#resolve(value);
+      };
+      const onReject = (reason) => {
+        if (this.#isResolved || this.#isRejected || this.#isCancelled) {
+          return;
+        }
+        this.#isRejected = true;
+        if (this.#reject)
+          this.#reject(reason);
+      };
+      const onCancel = (cancelHandler) => {
+        if (this.#isResolved || this.#isRejected || this.#isCancelled) {
+          return;
+        }
+        this.#cancelHandlers.push(cancelHandler);
+      };
+      Object.defineProperty(onCancel, "isResolved", {
+        get: () => this.#isResolved
+      });
+      Object.defineProperty(onCancel, "isRejected", {
+        get: () => this.#isRejected
+      });
+      Object.defineProperty(onCancel, "isCancelled", {
+        get: () => this.#isCancelled
+      });
+      return executor(onResolve, onReject, onCancel);
+    });
+  }
+  get [Symbol.toStringTag]() {
+    return "Cancellable Promise";
+  }
+  then(onFulfilled, onRejected) {
+    return this.#promise.then(onFulfilled, onRejected);
+  }
+  catch(onRejected) {
+    return this.#promise.catch(onRejected);
+  }
+  finally(onFinally) {
+    return this.#promise.finally(onFinally);
+  }
+  cancel() {
+    if (this.#isResolved || this.#isRejected || this.#isCancelled) {
+      return;
+    }
+    this.#isCancelled = true;
+    if (this.#cancelHandlers.length) {
+      try {
+        for (const cancelHandler of this.#cancelHandlers) {
+          cancelHandler();
+        }
+      } catch (error) {
+        console.warn("Cancellation threw an error", error);
+        return;
+      }
+    }
+    this.#cancelHandlers.length = 0;
+    if (this.#reject)
+      this.#reject(new CancelError("Request aborted"));
+  }
+  get isCancelled() {
+    return this.#isCancelled;
+  }
+}
+// src/generated/dokploy/core/OpenAPI.ts
+var OpenAPI = {
+  BASE: "",
+  VERSION: "1.0.0",
+  WITH_CREDENTIALS: false,
+  CREDENTIALS: "include",
+  TOKEN: undefined,
+  USERNAME: undefined,
+  PASSWORD: undefined,
+  HEADERS: undefined,
+  ENCODE_PATH: undefined
+};
+// src/generated/dokploy/core/request.ts
+var isDefined = (value) => {
+  return value !== undefined && value !== null;
+};
+var isString = (value) => {
+  return typeof value === "string";
+};
+var isStringWithValue = (value) => {
+  return isString(value) && value !== "";
+};
+var isBlob = (value) => {
+  return typeof value === "object" && typeof value.type === "string" && typeof value.stream === "function" && typeof value.arrayBuffer === "function" && typeof value.constructor === "function" && typeof value.constructor.name === "string" && /^(Blob|File)$/.test(value.constructor.name) && /^(Blob|File)$/.test(value[Symbol.toStringTag]);
+};
+var isFormData = (value) => {
+  return value instanceof FormData;
+};
+var base64 = (str) => {
+  try {
+    return btoa(str);
+  } catch (err) {
+    return Buffer.from(str).toString("base64");
+  }
+};
+var getQueryString = (params) => {
+  const qs = [];
+  const append = (key2, value) => {
+    qs.push(`${encodeURIComponent(key2)}=${encodeURIComponent(String(value))}`);
+  };
+  const process4 = (key2, value) => {
+    if (isDefined(value)) {
+      if (Array.isArray(value)) {
+        value.forEach((v) => {
+          process4(key2, v);
+        });
+      } else if (typeof value === "object") {
+        Object.entries(value).forEach(([k, v]) => {
+          process4(`${key2}[${k}]`, v);
+        });
+      } else {
+        append(key2, value);
+      }
+    }
+  };
+  Object.entries(params).forEach(([key2, value]) => {
+    process4(key2, value);
+  });
+  if (qs.length > 0) {
+    return `?${qs.join("&")}`;
+  }
+  return "";
+};
+var getUrl = (config, options) => {
+  const encoder = config.ENCODE_PATH || encodeURI;
+  const path = options.url.replace("{api-version}", config.VERSION).replace(/{(.*?)}/g, (substring, group) => {
+    if (options.path?.hasOwnProperty(group)) {
+      return encoder(String(options.path[group]));
+    }
+    return substring;
+  });
+  const url2 = `${config.BASE}${path}`;
+  if (options.query) {
+    return `${url2}${getQueryString(options.query)}`;
+  }
+  return url2;
+};
+var getFormData = (options) => {
+  if (options.formData) {
+    const formData = new FormData;
+    const process4 = (key2, value) => {
+      if (isString(value) || isBlob(value)) {
+        formData.append(key2, value);
+      } else {
+        formData.append(key2, JSON.stringify(value));
+      }
+    };
+    Object.entries(options.formData).filter(([_, value]) => isDefined(value)).forEach(([key2, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((v) => process4(key2, v));
+      } else {
+        process4(key2, value);
+      }
+    });
+    return formData;
+  }
+  return;
+};
+var resolve = async (options, resolver) => {
+  if (typeof resolver === "function") {
+    return resolver(options);
+  }
+  return resolver;
+};
+var getHeaders = async (config, options) => {
+  const [token, username, password, additionalHeaders] = await Promise.all([
+    resolve(options, config.TOKEN),
+    resolve(options, config.USERNAME),
+    resolve(options, config.PASSWORD),
+    resolve(options, config.HEADERS)
+  ]);
+  const headers = Object.entries({
+    Accept: "application/json",
+    ...additionalHeaders,
+    ...options.headers
+  }).filter(([_, value]) => isDefined(value)).reduce((headers2, [key2, value]) => ({
+    ...headers2,
+    [key2]: String(value)
+  }), {});
+  if (isStringWithValue(token)) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  if (isStringWithValue(username) && isStringWithValue(password)) {
+    const credentials = base64(`${username}:${password}`);
+    headers["Authorization"] = `Basic ${credentials}`;
+  }
+  if (options.body !== undefined) {
+    if (options.mediaType) {
+      headers["Content-Type"] = options.mediaType;
+    } else if (isBlob(options.body)) {
+      headers["Content-Type"] = options.body.type || "application/octet-stream";
+    } else if (isString(options.body)) {
+      headers["Content-Type"] = "text/plain";
+    } else if (!isFormData(options.body)) {
+      headers["Content-Type"] = "application/json";
+    }
+  }
+  return new Headers(headers);
+};
+var getRequestBody = (options) => {
+  if (options.body !== undefined) {
+    if (options.mediaType?.includes("/json")) {
+      return JSON.stringify(options.body);
+    } else if (isString(options.body) || isBlob(options.body) || isFormData(options.body)) {
+      return options.body;
+    } else {
+      return JSON.stringify(options.body);
+    }
+  }
+  return;
+};
+var sendRequest = async (config, options, url2, body, formData, headers, onCancel) => {
+  const controller = new AbortController;
+  const request = {
+    headers,
+    body: body ?? formData,
+    method: options.method,
+    signal: controller.signal
+  };
+  if (config.WITH_CREDENTIALS) {
+    request.credentials = config.CREDENTIALS;
+  }
+  onCancel(() => controller.abort());
+  return await fetch(url2, request);
+};
+var getResponseHeader = (response, responseHeader) => {
+  if (responseHeader) {
+    const content = response.headers.get(responseHeader);
+    if (isString(content)) {
+      return content;
+    }
+  }
+  return;
+};
+var getResponseBody = async (response) => {
+  if (response.status !== 204) {
+    try {
+      const contentType = response.headers.get("Content-Type");
+      if (contentType) {
+        const jsonTypes = ["application/json", "application/problem+json"];
+        const isJSON = jsonTypes.some((type) => contentType.toLowerCase().startsWith(type));
+        if (isJSON) {
+          return await response.json();
+        } else {
+          return await response.text();
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+  return;
+};
+var catchErrorCodes = (options, result) => {
+  const errors2 = {
+    400: "Bad Request",
+    401: "Unauthorized",
+    403: "Forbidden",
+    404: "Not Found",
+    500: "Internal Server Error",
+    502: "Bad Gateway",
+    503: "Service Unavailable",
+    ...options.errors
+  };
+  const error = errors2[result.status];
+  if (error) {
+    throw new ApiError(options, result, error);
+  }
+  if (!result.ok) {
+    const errorStatus = result.status ?? "unknown";
+    const errorStatusText = result.statusText ?? "unknown";
+    const errorBody = (() => {
+      try {
+        return JSON.stringify(result.body, null, 2);
+      } catch (e) {
+        return;
+      }
+    })();
+    throw new ApiError(options, result, `Generic Error: status: ${errorStatus}; status text: ${errorStatusText}; body: ${errorBody}`);
+  }
+};
+var request = (config, options) => {
+  return new CancelablePromise(async (resolve2, reject, onCancel) => {
+    try {
+      const url2 = getUrl(config, options);
+      const formData = getFormData(options);
+      const body = getRequestBody(options);
+      const headers = await getHeaders(config, options);
+      if (!onCancel.isCancelled) {
+        const response = await sendRequest(config, options, url2, body, formData, headers, onCancel);
+        const responseBody = await getResponseBody(response);
+        const responseHeader = getResponseHeader(response, options.responseHeader);
+        const result = {
+          url: url2,
+          ok: response.ok,
+          status: response.status,
+          statusText: response.statusText,
+          body: responseHeader ?? responseBody
+        };
+        catchErrorCodes(options, result);
+        resolve2(result.body);
+      }
+    } catch (error) {
+      reject(error);
+    }
+  });
+};
+// src/generated/dokploy/services/ApplicationService.ts
+class ApplicationService {
+  static applicationCreate(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.create",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationOne(applicationId) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/application.one",
+      query: {
+        applicationId
+      }
+    });
+  }
+  static applicationReload(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.reload",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationDelete(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.delete",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationStop(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.stop",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationStart(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.start",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationRedeploy(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.redeploy",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationSaveEnvironment(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.saveEnvironment",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationSaveBuildType(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.saveBuildType",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationSaveGithubProvider(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.saveGithubProvider",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationSaveGitlabProvider(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.saveGitlabProvider",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationSaveBitbucketProvider(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.saveBitbucketProvider",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationSaveGiteaProvider(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.saveGiteaProvider",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationSaveDockerProvider(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.saveDockerProvider",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationSaveGitProdiver(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.saveGitProdiver",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationDisconnectGitProvider(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.disconnectGitProvider",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationMarkRunning(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.markRunning",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationUpdate(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.update",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationRefreshToken(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.refreshToken",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationDeploy(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.deploy",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationCleanQueues(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.cleanQueues",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationReadTraefikConfig(applicationId) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/application.readTraefikConfig",
+      query: {
+        applicationId
+      }
+    });
+  }
+  static applicationUpdateTraefikConfig(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.updateTraefikConfig",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationReadAppMonitoring(appName) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/application.readAppMonitoring",
+      query: {
+        appName
+      }
+    });
+  }
+  static applicationMove(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.move",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static applicationCancelDeployment(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/application.cancelDeployment",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+}
+// src/generated/dokploy/services/ComposeService.ts
+class ComposeService {
+  static composeCreate(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.create",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeOne(composeId) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/compose.one",
+      query: {
+        composeId
+      }
+    });
+  }
+  static composeUpdate(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.update",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeDelete(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.delete",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeCleanQueues(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.cleanQueues",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeLoadServices(composeId, type) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/compose.loadServices",
+      query: {
+        composeId,
+        type
+      }
+    });
+  }
+  static composeLoadMountsByService(composeId, serviceName) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/compose.loadMountsByService",
+      query: {
+        composeId,
+        serviceName
+      }
+    });
+  }
+  static composeFetchSourceType(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.fetchSourceType",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeRandomizeCompose(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.randomizeCompose",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeIsolatedDeployment(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.isolatedDeployment",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeGetConvertedCompose(composeId) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/compose.getConvertedCompose",
+      query: {
+        composeId
+      }
+    });
+  }
+  static composeDeploy(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.deploy",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeRedeploy(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.redeploy",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeStop(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.stop",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeStart(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.start",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeGetDefaultCommand(composeId) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/compose.getDefaultCommand",
+      query: {
+        composeId
+      }
+    });
+  }
+  static composeRefreshToken(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.refreshToken",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeDeployTemplate(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.deployTemplate",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeTemplates(baseUrl) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/compose.templates",
+      query: {
+        baseUrl
+      }
+    });
+  }
+  static composeGetTags(baseUrl) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/compose.getTags",
+      query: {
+        baseUrl
+      }
+    });
+  }
+  static composeDisconnectGitProvider(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.disconnectGitProvider",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeMove(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.move",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeProcessTemplate(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.processTemplate",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeImport(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.import",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static composeCancelDeployment(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/compose.cancelDeployment",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+}
+// src/generated/dokploy/services/ProjectService.ts
+class ProjectService {
+  static projectCreate(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/project.create",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static projectOne(projectId) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/project.one",
+      query: {
+        projectId
+      }
+    });
+  }
+  static projectAll() {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/project.all"
+    });
+  }
+  static projectRemove(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/project.remove",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static projectUpdate(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/project.update",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static projectDuplicate(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/project.duplicate",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+}
+// src/generated/dokploy/services/UserService.ts
+class UserService {
+  static userAll() {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/user.all"
+    });
+  }
+  static userOne(userId) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/user.one",
+      query: {
+        userId
+      }
+    });
+  }
+  static userGet() {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/user.get"
+    });
+  }
+  static userHaveRootAccess() {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/user.haveRootAccess"
+    });
+  }
+  static userGetBackups() {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/user.getBackups"
+    });
+  }
+  static userGetServerMetrics() {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/user.getServerMetrics"
+    });
+  }
+  static userUpdate(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/user.update",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static userGetUserByToken(token) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/user.getUserByToken",
+      query: {
+        token
+      }
+    });
+  }
+  static userGetMetricsToken() {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/user.getMetricsToken"
+    });
+  }
+  static userRemove(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/user.remove",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static userAssignPermissions(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/user.assignPermissions",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static userGetInvitations() {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/user.getInvitations"
+    });
+  }
+  static userGetContainerMetrics(url2, token, appName, dataPoints) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/user.getContainerMetrics",
+      query: {
+        url: url2,
+        token,
+        appName,
+        dataPoints
+      }
+    });
+  }
+  static userGenerateToken() {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/user.generateToken"
+    });
+  }
+  static userDeleteApiKey(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/user.deleteApiKey",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static userCreateApiKey(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/user.createApiKey",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+  static userCheckUserOrganizations(userId) {
+    return request(OpenAPI, {
+      method: "GET",
+      url: "/user.checkUserOrganizations",
+      query: {
+        userId
+      }
+    });
+  }
+  static userSendInvitation(requestBody) {
+    return request(OpenAPI, {
+      method: "POST",
+      url: "/user.sendInvitation",
+      body: requestBody,
+      mediaType: "application/json"
+    });
+  }
+}
+// src/config.ts
+var __filename2 = fileURLToPath(import.meta.url);
+var __dirname2 = path.dirname(__filename2);
+var configPath = path.resolve(__dirname2, "..", "./config.json");
+var ConfigSchema = partial(object({
+  url: string(),
+  token: string()
+}));
+var configCache = null;
+function getConfig() {
+  if (configCache)
+    return configCache;
+  let rawConfig;
+  try {
+    rawConfig = fs.readFileSync(configPath).toString();
+    const parsedConfig = JSON.parse(rawConfig);
+    configCache = parse(ConfigSchema, parsedConfig);
+  } catch {
+    console.warn("Could not read config, creating a new one...");
+    rawConfig = "{}";
+    configCache = {};
+    fs.writeFileSync(configPath, rawConfig);
+  }
+  return configCache;
+}
+function saveConfig() {
+  try {
+    fs.writeFileSync(configPath, JSON.stringify(configCache, null, 2));
+  } catch (error) {
+    console.error("Could not save config:", error);
+  }
+}
+function ensureConfig() {
+  configCache = getConfig();
+}
+function setMany(newConfig) {
+  const config = configCache || getConfig();
+  configCache = { ...config, ...newConfig };
+  saveConfig();
+}
+function getAll() {
+  return getConfig();
+}
+function initOpenAPIConfig() {
+  const { url: url2, token } = getAll();
+  if (!url2 || !token) {
+    console.error(import_picocolors.default.red("Invalid configuration file. Please authenticate again using the 'login' command."));
+    process.exit(1);
+  }
+  OpenAPI.BASE = `${url2}/api`;
+  OpenAPI.TOKEN = token;
+  OpenAPI.HEADERS = {
+    "x-api-key": token
+  };
+}
+
+// src/commands/authentication.ts
 function registerAuthenticationCommands(program2) {
   const subCommand = new Command("auth");
   login(subCommand);
@@ -6499,8 +6499,8 @@ async function verify(authCommand) {
 }
 
 // src/commands/environment.ts
-var import_picocolors3 = __toESM(require_picocolors(), 1);
 import fs2 from "node:fs/promises";
+var import_picocolors3 = __toESM(require_picocolors(), 1);
 
 // src/utils.ts
 function isError(error, code) {
@@ -6657,6 +6657,8 @@ function registerCommands(program2) {
   registerAuthenticationCommands(program2);
   registerEnvironmentCommands(program2);
 }
+// package.json
+var version = "0.1.0";
 
 // src/main.ts
 ensureConfig();
