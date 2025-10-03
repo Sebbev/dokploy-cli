@@ -6521,28 +6521,32 @@ function pull(program2) {
   program2.command("pull").description("Pull environment variables from a specified project->environment->service").argument("<file>", "File to save the environment variables to").action(async function(filePath) {
     initOpenAPIConfig();
     const projects = await ProjectService.projectAll();
+    projects.sort((a, b) => a.name.localeCompare(b.name));
     const selectedProject = await esm_default4({
       message: import_picocolors3.default.blue("Select Project"),
-      choices: projects.toSorted((a, b) => a.name.localeCompare(b.name)).map((project) => ({
+      choices: projects.map((project) => ({
         name: project.name,
         value: project
       }))
     });
+    selectedProject.environments.sort((a, b) => a.name.localeCompare(b.name));
     const selectedEnvironment = await esm_default4({
       message: import_picocolors3.default.blue("Select Environment"),
-      choices: selectedProject.environments.toSorted((a, b) => a.name.localeCompare(b.name)).map((environment) => ({
+      choices: selectedProject.environments.map((environment) => ({
         name: environment.name,
         value: environment
       }))
     });
+    selectedEnvironment.applications.sort((a, b) => a.name.localeCompare(b.name));
+    selectedEnvironment.compose.sort((a, b) => a.name.localeCompare(b.name));
     const pulledEnv = await esm_default4({
       message: import_picocolors3.default.blue("Select service to pull environment variables from"),
       choices: [
-        ...selectedEnvironment.applications.toSorted((a, b) => a.name.localeCompare(b.name)).map((application) => ({
+        ...selectedEnvironment.applications.map((application) => ({
           name: `${application.name} (Application)`,
           value: application.env
         })),
-        ...selectedEnvironment.compose.toSorted((a, b) => a.name.localeCompare(b.name)).map((compose) => ({
+        ...selectedEnvironment.compose.map((compose) => ({
           name: `${compose.name} (Compose)`,
           value: compose.env,
           description: compose.description
@@ -6592,28 +6596,32 @@ function push(program2) {
       throw error;
     }
     const projects = await ProjectService.projectAll();
+    projects.sort((a, b) => a.name.localeCompare(b.name));
     const selectedProject = await esm_default4({
       message: import_picocolors3.default.blue("Select Project"),
-      choices: projects.toSorted((a, b) => a.name.localeCompare(b.name)).map((project) => ({
+      choices: projects.map((project) => ({
         name: project.name,
         value: project
       }))
     });
+    selectedProject.environments.sort((a, b) => a.name.localeCompare(b.name));
     const selectedEnvironment = await esm_default4({
       message: import_picocolors3.default.blue("Select Environment"),
-      choices: selectedProject.environments.toSorted((a, b) => a.name.localeCompare(b.name)).map((environment) => ({
+      choices: selectedProject.environments.map((environment) => ({
         name: environment.name,
         value: environment
       }))
     });
+    selectedEnvironment.applications.sort((a, b) => a.name.localeCompare(b.name));
+    selectedEnvironment.compose.sort((a, b) => a.name.localeCompare(b.name));
     const selectedService = await esm_default4({
       message: import_picocolors3.default.blue("Select service to pus environment variables to"),
       choices: [
-        ...selectedEnvironment.applications.toSorted((a, b) => a.name.localeCompare(b.name)).map((application) => ({
+        ...selectedEnvironment.applications.map((application) => ({
           name: `${application.name} (Application)`,
           value: application
         })),
-        ...selectedEnvironment.compose.toSorted((a, b) => a.name.localeCompare(b.name)).map((compose) => ({
+        ...selectedEnvironment.compose.map((compose) => ({
           name: `${compose.name} (Compose)`,
           value: compose,
           description: compose.description
@@ -6652,13 +6660,43 @@ Environment variables pushed successfully`));
   });
 }
 
+// src/commands/project.ts
+var pc4 = __toESM(require_picocolors(), 1);
+function registerProjectCommands(program2) {
+  const subCommand = new Command("project");
+  create(subCommand);
+  info(subCommand);
+  list(subCommand);
+  program2.addCommand(subCommand);
+}
+function create(program2) {}
+function info(program2) {}
+function list(program2) {
+  program2.command("list").description("List all projects").action(async () => {
+    initOpenAPIConfig();
+    const projects = await ProjectService.projectAll();
+    if (!projects.length) {
+      console.log(pc4.yellow(`
+No projects found.`));
+      return;
+    }
+    console.log(projects[0]);
+    console.log(pc4.bold(pc4.green(`
+Projects:`)));
+    projects.forEach((project) => {
+      console.log("-", pc4.cyan(`${pc4.bold(project.name)} — ${project.description || "No description"}`));
+    });
+  });
+}
+
 // src/commands/index.ts
 function registerCommands(program2) {
   registerAuthenticationCommands(program2);
   registerEnvironmentCommands(program2);
+  registerProjectCommands(program2);
 }
 // package.json
-var version = "0.1.0";
+var version = "0.1.1";
 
 // src/main.ts
 ensureConfig();
