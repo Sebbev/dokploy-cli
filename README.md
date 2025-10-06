@@ -21,6 +21,7 @@ A CLI for managing your Dokploy server from the terminal.
   - [Environment variables](#environment-variables)
     - [Pull](#pull)
     - [Push](#push)
+  - [Projects](#projects)
   - [Development (from source)](#development-from-source)
     - [Regenerate API client](#regenerate-api-client)
   - [License](#license)
@@ -87,6 +88,8 @@ Current top-level commands:
 
 - `auth` – authenticate against a Dokploy server
 - `env` – pull/push environment variables for applications/compose services
+- `project` – manage projects (create, list, get info)
+- `project` – manage projects (create, list, get info)
 
 ---
 
@@ -142,6 +145,46 @@ Description: read env from `<file>`, choose Project → Environment → Service,
 Args:
 
 - `<file>` Input path of the env file to push (e.g. `.env`).
+
+---
+
+## Projects
+
+Manage Dokploy projects - create new projects, list existing ones, and get detailed information.
+
+### Create
+
+```bash
+dokploy-cli project create [--name <NAME>] [--description <DESCRIPTION>] [--yes]
+```
+
+Description: create a new project with interactive prompts or flags.
+
+Flags:
+
+- `--name` Project name
+- `--description` Project description (optional)
+- `--yes` Skip confirmation prompt
+
+### Info
+
+```bash
+dokploy-cli project info [--project <PROJECT_ID>]
+```
+
+Description: get detailed information about a project, including all environments and services.
+
+Flags:
+
+- `--project` Project ID (if omitted, you'll be prompted to select from a list)
+
+### List
+
+```bash
+dokploy-cli project list
+```
+
+Description: list all projects with their names and descriptions.
 
 ---
 
