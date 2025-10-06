@@ -140,7 +140,7 @@ function push(program: Command) {
 			selectedEnvironment.compose.sort((a, b) => a.name.localeCompare(b.name));
 
 			const selectedService = await select<Application | Compose>({
-				message: pc.blue("Select service to pus environment variables to"),
+				message: pc.blue("Select service to push environment variables to"),
 				choices: [
 					...selectedEnvironment.applications.map((application) => ({
 						name: `${application.name} (Application)`,
