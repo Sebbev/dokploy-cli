@@ -2,7 +2,7 @@
 	"name": "@sebbev/dokploy-cli",
 	"description": "A CLI tool for managing your Dokploy server",
 	"author": "Sebastian Vallin",
-	"version": "0.2.1",
+	"version": "0.2.0",
 	"license": "MIT",
 	"homepage": "https://github.com/Sebbev/dokploy-cli#readme",
 	"bugs": "https://github.com/Sebbev/dokploy-cli/issues",
