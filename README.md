@@ -89,7 +89,6 @@ Current top-level commands:
 - `auth` – authenticate against a Dokploy server
 - `env` – pull/push environment variables for applications/compose services
 - `project` – manage projects (create, list, get info)
-- `project` – manage projects (create, list, get info)
 
 ---
 
