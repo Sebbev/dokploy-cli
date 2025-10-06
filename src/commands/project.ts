@@ -68,7 +68,8 @@ function create(program: Command) {
 				description = v.parse(
 					DescriptionSchema,
 					await input({
-						message: pc.blue("Project Description (optional):"),
+						message: pc.blue("Project Description:"),
+						required: false,
 						validate(value) {
 							const result = v.safeParse(DescriptionSchema, value);
 							return result.success ? true : result.issues[0].message;
