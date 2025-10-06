@@ -66,13 +66,3 @@ export interface Redis {
 	name: string;
 	appName: string;
 }
-
-export interface Project {
-	projectId: string;
-	name: string;
-	description: string;
-	createdAt: string;
-	organizationId: string;
-	env: string;
-	environments: Environment[];
-}

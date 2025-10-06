@@ -1,6 +1,6 @@
 import { confirm, input, select } from "@inquirer/prompts";
 import { Command } from "commander";
-import * as pc from "picocolors";
+import pc from "picocolors";
 import * as v from "valibot";
 import { initOpenAPIConfig } from "@/config";
 import { ApiError, ProjectService } from "@/generated/dokploy";
