@@ -25,6 +25,11 @@ A CLI for managing your Dokploy server from the terminal.
     - [Create](#create)
     - [Info](#info)
     - [List](#list)
+  - [Applications](#applications)
+    - [Create](#create-1)
+    - [Deploy](#deploy)
+    - [Stop](#stop)
+    - [Delete](#delete)
   - [Development (from source)](#development-from-source)
     - [Regenerate API client](#regenerate-api-client)
   - [License](#license)
@@ -92,6 +97,7 @@ Current top-level commands:
 - `auth` – authenticate against a Dokploy server
 - `env` – pull/push environment variables for applications/compose services
 - `project` – manage projects (create, list, get info)
+- `app` – manage applications (create, deploy, stop, delete)
 
 ---
 
@@ -187,6 +193,73 @@ dokploy-cli project list
 ```
 
 Description: list all projects with their names and descriptions.
+
+---
+
+## Applications
+
+Manage applications within projects and environments - create new applications, deploy them, stop running applications, and delete applications.
+
+### Create
+
+```bash
+dokploy-cli app create [--project <PROJECT_ID>] [--environment <ENVIRONMENT_ID>] [--name <APP_NAME>] [--description <DESCRIPTION>] [--yes]
+```
+
+Description: create a new application in a specified project and environment.
+
+Flags:
+
+- `--project` Project ID (if omitted, you'll be prompted to select)
+- `--environment` Environment ID (if omitted, you'll be prompted to select)
+- `--name` Application name
+- `--description` Application description (optional)
+- `--yes` Skip confirmation prompt
+
+### Deploy
+
+```bash
+dokploy-cli app deploy [--project <PROJECT_ID>] [--environment <ENVIRONMENT_ID>] [--app <APP_ID>] [--yes]
+```
+
+Description: deploy an application from a specified project and environment.
+
+Flags:
+
+- `--project` Project ID (if omitted, you'll be prompted to select)
+- `--environment` Environment ID (if omitted, you'll be prompted to select)
+- `--app` Application ID (if omitted, you'll be prompted to select)
+- `--yes` Skip confirmation prompt
+
+### Stop
+
+```bash
+dokploy-cli app stop [--project <PROJECT_ID>] [--environment <ENVIRONMENT_ID>] [--app <APP_ID>] [--yes]
+```
+
+Description: stop a running application from a specified project and environment.
+
+Flags:
+
+- `--project` Project ID (if omitted, you'll be prompted to select)
+- `--environment` Environment ID (if omitted, you'll be prompted to select)
+- `--app` Application ID (if omitted, you'll be prompted to select)
+- `--yes` Skip confirmation prompt
+
+### Delete
+
+```bash
+dokploy-cli app delete [--project <PROJECT_ID>] [--environment <ENVIRONMENT_ID>] [--app <APP_ID>] [--yes]
+```
+
+Description: delete an application from a specified project and environment.
+
+Flags:
+
+- `--project` Project ID (if omitted, you'll be prompted to select)
+- `--environment` Environment ID (if omitted, you'll be prompted to select)
+- `--app` Application ID (if omitted, you'll be prompted to select)
+- `--yes` Skip confirmation prompt
 
 ---
 
