@@ -121,7 +121,9 @@ function create(program: Command) {
 							),
 						);
 					} else {
-						this.error(pc.red("An unknown error occurred while fetching environments for the project."));
+						this.error(
+							pc.red("An unknown error occurred while fetching environments for the project."),
+						);
 					}
 				}
 			}
@@ -324,7 +326,7 @@ function deploy(program: Command) {
 						if (error instanceof Error) {
 							this.error(
 								pc.red(
-									`Failed to fetch environment with ID ${options.environment}: ${error.message}`,
+									`Failed to fetch environments for project ${project.name}: ${error.message}`,
 								),
 							);
 						} else {
@@ -339,7 +341,7 @@ function deploy(program: Command) {
 
 				environment.applications.sort((a, b) => a.name.localeCompare(b.name));
 				app = await select({
-					message: pc.blue("Select Project"),
+					message: pc.blue("Select Application"),
 					choices: environment.applications.map((app) => ({
 						name: app.name,
 						value: app as Application & { environment: Environment & { project: Project } },
@@ -494,12 +496,14 @@ function stop(program: Command) {
 					} catch (error) {
 						if (error instanceof Error) {
 							this.error(
-								pc.red(
-									`Failed to list environments for project ${project.name}: ${error.message}`,
-								),
+								pc.red(`Failed to list environments for project ${project.name}: ${error.message}`),
 							);
 						} else {
-							this.error(pc.red("An unknown error occurred while listing environments for the selected project."));
+							this.error(
+								pc.red(
+									"An unknown error occurred while listing environments for the selected project.",
+								),
+							);
 						}
 					}
 				}
@@ -510,7 +514,7 @@ function stop(program: Command) {
 
 				environment.applications.sort((a, b) => a.name.localeCompare(b.name));
 				app = await select({
-					message: pc.blue("Select Project"),
+					message: pc.blue("Select Application"),
 					choices: environment.applications.map((app) => ({
 						name: app.name,
 						value: app as Application & { environment: Environment & { project: Project } },
@@ -665,9 +669,7 @@ function deleteApp(program: Command) {
 					} catch (error) {
 						if (error instanceof Error) {
 							this.error(
-								pc.red(
-									`Failed to fetch environment with ID ${options.environment}: ${error.message}`,
-								),
+								pc.red(`Failed to fetch environment for project ${project.name}: ${error.message}`),
 							);
 						} else {
 							this.error(pc.red("An unknown error occurred while fetching the environment."));
@@ -681,7 +683,7 @@ function deleteApp(program: Command) {
 
 				environment.applications.sort((a, b) => a.name.localeCompare(b.name));
 				app = await select({
-					message: pc.blue("Select Project"),
+					message: pc.blue("Select Application"),
 					choices: environment.applications.map((app) => ({
 						name: app.name,
 						value: app as Application & { environment: Environment & { project: Project } },
