@@ -496,12 +496,14 @@ function stop(program: Command) {
 					} catch (error) {
 						if (error instanceof Error) {
 							this.error(
-								pc.red(`Failed to list environments for project ${project.name}: ${error.message}`),
+								pc.red(
+									`Failed to fetch environments for project ${project.name}: ${error.message}`,
+								),
 							);
 						} else {
 							this.error(
 								pc.red(
-									"An unknown error occurred while listing environments for the selected project.",
+									"An unknown error occurred while fetching environments for the selected project.",
 								),
 							);
 						}
@@ -669,10 +671,16 @@ function deleteApp(program: Command) {
 					} catch (error) {
 						if (error instanceof Error) {
 							this.error(
-								pc.red(`Failed to fetch environment for project ${project.name}: ${error.message}`),
+								pc.red(
+									`Failed to fetch environments for project ${project.name}: ${error.message}`,
+								),
 							);
 						} else {
-							this.error(pc.red("An unknown error occurred while fetching the environment."));
+							this.error(
+								pc.red(
+									"An unknown error occurred while fetching environments for the selected project.",
+								),
+							);
 						}
 					}
 				}
