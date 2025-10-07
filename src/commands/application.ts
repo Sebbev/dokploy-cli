@@ -10,6 +10,7 @@ export function registerApplicationCommands(program: Command) {
 	const subCommand = new Command("app");
 
 	create(subCommand);
+	stop(subCommand);
 	deleteApp(subCommand);
 
 	program.addCommand(subCommand);
@@ -198,6 +199,177 @@ function create(program: Command) {
 					this.error(pc.red(`Failed to create application: ${error.message}`));
 				} else {
 					this.error(pc.red("An unknown error occurred while creating the application."));
+				}
+			}
+		});
+}
+
+function stop(program: Command) {
+	program
+		.command("stop")
+		.description("Stop an application from a specified project->environment")
+		.option("-p, --project [PROJECT_ID]", "Project ID")
+		.option("-e, --environment [ENVIRONMENT_ID]", "Environment ID")
+		.option("-a, --app [APP_ID]", "Application ID")
+		.option("-y, --yes", "Skip confirmation prompt", false)
+		.action(async function () {
+			type Options = {
+				project?: string;
+				environment?: string;
+				app?: string;
+				yes: boolean;
+			};
+
+			const options = this.opts<Options>();
+
+			initOpenAPIConfig();
+
+			let app: Application & { environment: Environment & { project: Project } };
+			if (options.app) {
+				try {
+					app = await ApplicationService.applicationOne(options.app);
+					console.log(
+						pc.green("✔"),
+						pc.bold(pc.blue("Select Project")),
+						pc.cyan(app.environment.project.name),
+					);
+					console.log(
+						pc.green("✔"),
+						pc.bold(pc.blue("Select Environment")),
+						pc.cyan(app.environment.name),
+					);
+					console.log(pc.green("✔"), pc.bold(pc.blue("Select Application")), pc.cyan(app.name));
+				} catch (error) {
+					if (error instanceof Error) {
+						this.error(pc.red(`Failed to fetch application: ${error.message}`));
+					} else {
+						this.error(pc.red("An unknown error occurred while fetching the application."));
+					}
+				}
+			} else {
+				let project: Project;
+				if (options.project) {
+					try {
+						project = await ProjectService.projectOne(options.project);
+						console.log(pc.green("✔"), pc.bold(pc.blue("Select Project")), pc.cyan(project.name));
+					} catch (error) {
+						if (error instanceof Error) {
+							this.error(
+								pc.red(`Failed to fetch project with ID ${options.project}: ${error.message}`),
+							);
+						} else {
+							this.error(pc.red("An unknown error occurred while fetching the project."));
+						}
+					}
+				} else {
+					const projects: Project[] = await ProjectService.projectAll();
+					projects.sort((a, b) => a.name.localeCompare(b.name));
+
+					project = await select({
+						message: pc.blue("Select Project"),
+						choices: projects.map((project) => ({
+							name: project.name,
+							value: project,
+						})),
+					});
+				}
+
+				let environment: Environment;
+				if (options.environment) {
+					try {
+						environment = await EnvironmentService.environmentOne(options.environment);
+						if (environment.projectId !== project.projectId) {
+							this.error(
+								pc.red(
+									`Environment with ID ${options.environment} does not belong to project ${project.name}`,
+								),
+							);
+						}
+						console.log(
+							pc.green("✔"),
+							pc.bold(pc.blue("Select Environment")),
+							pc.cyan(environment.name),
+						);
+					} catch (error) {
+						if (error instanceof Error) {
+							this.error(
+								pc.red(
+									`Failed to fetch environment with ID ${options.environment}: ${error.message}`,
+								),
+							);
+						} else {
+							this.error(pc.red("An unknown error occurred while fetching the environment."));
+						}
+					}
+				} else {
+					try {
+						const environments: Environment[] = await EnvironmentService.environmentByProjectId(
+							project.projectId,
+						);
+						environments.sort((a, b) => a.name.localeCompare(b.name));
+
+						if (!environments.length) {
+							this.error(pc.red("No environments found for the selected project."));
+						}
+
+						environment = await select({
+							message: pc.blue("Select Environment"),
+							choices: environments.map((environment) => ({
+								name: environment.name,
+								value: environment,
+							})),
+						});
+					} catch (error) {
+						if (error instanceof Error) {
+							this.error(
+								pc.red(
+									`Failed to fetch environment with ID ${options.environment}: ${error.message}`,
+								),
+							);
+						} else {
+							this.error(pc.red("An unknown error occurred while fetching the environment."));
+						}
+					}
+				}
+
+				if (!environment.applications.length) {
+					this.error(pc.yellow("No applications found for the selected environment."));
+				}
+
+				environment.applications.sort((a, b) => a.name.localeCompare(b.name));
+				app = await select({
+					message: pc.blue("Select Project"),
+					choices: environment.applications.map((app) => ({
+						name: app.name,
+						value: app as Application & { environment: Environment & { project: Project } },
+					})),
+				});
+			}
+
+			let accepted = options.yes;
+			if (!accepted) {
+				accepted = await confirm({
+					message: pc.blue("Do you want to stop the application?"),
+					default: false,
+				});
+
+				if (!accepted) {
+					this.error(pc.red("Aborting"));
+				}
+			} else {
+				console.warn(pc.yellow("Skipping confirmation prompt due to --yes flag."));
+			}
+
+			try {
+				await ApplicationService.applicationStop({
+					applicationId: app.applicationId,
+				});
+				console.log(pc.green(`Application '${app.name}' stopped successfully!`));
+			} catch (error) {
+				if (error instanceof Error) {
+					this.error(pc.red(`Failed to stop application: ${error.message}`));
+				} else {
+					this.error(pc.red("An unknown error occurred while stopping the application."));
 				}
 			}
 		});
