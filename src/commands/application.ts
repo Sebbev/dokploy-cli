@@ -117,11 +117,11 @@ function create(program: Command) {
 					if (error instanceof Error) {
 						this.error(
 							pc.red(
-								`Failed to fetch environment with ID ${options.environment}: ${error.message}`,
+								`Failed to fetch environments for project ${project.name} (${project.projectId}): ${error.message}`,
 							),
 						);
 					} else {
-						this.error(pc.red("An unknown error occurred while fetching the environment."));
+						this.error(pc.red("An unknown error occurred while fetching environments for the project."));
 					}
 				}
 			}
