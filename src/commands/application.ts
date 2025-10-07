@@ -495,11 +495,11 @@ function stop(program: Command) {
 						if (error instanceof Error) {
 							this.error(
 								pc.red(
-									`Failed to fetch environment with ID ${options.environment}: ${error.message}`,
+									`Failed to list environments for project ${project.name}: ${error.message}`,
 								),
 							);
 						} else {
-							this.error(pc.red("An unknown error occurred while fetching the environment."));
+							this.error(pc.red("An unknown error occurred while listing environments for the selected project."));
 						}
 					}
 				}
